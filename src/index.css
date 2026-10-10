@@ -22,13 +22,12 @@
 }
 
 body {
-  background: #120c10; /* the dark behind the cabin, shown until it's drawn */
   min-height: 100vh;
   overflow: hidden;
 }
 
-/* The Pokédex's spot in the cabin: on the fold-out table. Cabin.jsx works out
-   where that is for the window's size and sets --dex-x, --dex-y and --dex-scale. */
+/* The Pokédex's spot. The scene that calls it in works out where that is for
+   the window's size and sets --dex-x, --dex-y and --dex-scale (see Pokedex.jsx). */
 .dex-stage {
   position: fixed;
   left: var(--dex-x, 67vw);
@@ -36,6 +35,16 @@ body {
   width: 764.4px;
   height: 568px;
   transform: translate(-50%, -50%) scale(var(--dex-scale, 0.8));
+}
+
+/* Called into a scene, it slides in from the side of the screen nearest its
+   spot (--enter-dx, worked out in Pokedex.jsx) and settles there. */
+.dex-stage.entering { animation: dex-enter 0.9s cubic-bezier(0.2, 0.8, 0.25, 1); }
+@keyframes dex-enter {
+  from { transform: translate(calc(-50% + var(--enter-dx, 0px)), -50%) scale(var(--dex-scale, 0.8)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dex-stage.entering { animation: none; }
 }
 
 /* ============ The device: left half, hinge, lid ============
@@ -297,7 +306,7 @@ body {
 }
 
 /* Linked to the cabin's wall screen, the Pokédex echoes the screen's flash
-   0.2 s later, with the same timing (see .pulse-* in cabin/cabin.css): the
+   0.2 s later, with the same timing (see .pulse-* in cabin/vermillion.css): the
    green light flips (lit dims to 30%, dark lights up), and the yellow light
    glows faintly at 45%. "30%" here means 30% of the way from a light's off
    look (brightness 0.4) to fully lit (1): set with --strength. */
@@ -870,7 +879,7 @@ body {
 /* Narrower than the open device: stack them like a phone-sized Pokédex. */
 @media (max-width: 799px) {
   body { overflow: auto; padding: 1.5rem 1rem; }
-  /* the cabin as a picture on top (see cabin.css), the Pokédex below it */
+  /* the scene as a picture on top, the Pokédex below it (no slide-in here) */
   #root { display: flex; flex-direction: column; align-items: center; }
   .dex-stage {
     position: static;
@@ -878,6 +887,7 @@ body {
     height: auto;
     transform: none;
   }
+  .dex-stage.entering { animation: none; }
   .pokedex {
     display: flex;
     flex-direction: column;

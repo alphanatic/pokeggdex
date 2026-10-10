@@ -2,6 +2,10 @@
    All movement here steps from frame to frame instead of gliding,
    the way a Game Boy animates. */
 
+/* Behind the cabin, shown until it's drawn: a dark night-cabin colour.
+   (:has() makes it apply only while this scene is on the page.) */
+body:has(.cabin) { background: #120c10; }
+
 /* The cabin fills the window, behind the Pokédex. */
 .cabin {
   position: fixed;

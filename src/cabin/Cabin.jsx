@@ -5,14 +5,18 @@ import { useClock } from './clock.js'
 import WallScreen, { ScreenFrame, ScreenGlow } from './WallScreen.jsx'
 import { PortholeRim, PortholeView } from './Porthole.jsx'
 import TextBox from './TextBox.jsx'
-import './cabin.css'
+import { useLink } from './link.js'
+import Pokedex from '../pokedex/Pokedex.jsx'
+import { usePokedex } from '../pokedex/usePokedex.js'
+import './vermillion.css'
 
 // A cabin on the S.S. Anne, docked in Vermilion City: the world around the
 // Pokédex. It's pixel art, 320 x 180 pixels, scaled up to cover the window
 // (like background-size: cover) and anchored at the top.
-// The Pokédex sits on the fold-out table; the wall screen shows what it shows.
-// Clicking things in the cabin can tell you something, like reading a sign
-// in the games. Some of them are easter eggs.
+// This scene calls the Pokédex in (it slides in from the right) and stands it
+// on the fold-out table; the wall screen shows what it shows. Clicking things in
+// the cabin can tell you something, like reading a sign in the games. Some of
+// them are easter eggs. Its styles are in vermillion.css.
 
 export const SCENE = { w: 320, h: 180 }
 const FLOOR_Y = 140 // where the wall meets the floor
@@ -24,7 +28,7 @@ const DEX = { w: 764.4, h: 568 } // the open Pokédex (.dex-stage), in CSS px
 const DEX_SIZE = 1.05 // 5% larger than the base size below
 
 // Places the Pokédex on the table, for the current window size.
-export function useDexPlacement() {
+function useDexPlacement() {
   const [place, setPlace] = useState(null)
   useEffect(() => {
     function update() {
@@ -241,7 +245,7 @@ function Lamp({ lit }) {
     K: C.ink, L: C.brassL, B: C.brass, D: C.brassD,
     ...(lit ? { g: '#f8c860', G: '#fff0a8', W: '#ffffff' } : { g: '#98a0a0', G: '#c8d0d0', W: '#e8e8e0' }),
   }
-  const sway = [0, -1, 0, 1] // see .lamp-frame in cabin.css for the order they show in
+  const sway = [0, -1, 0, 1] // see .lamp-frame in vermillion.css for the order they show in
   return (
     <g>
       {lit && (
@@ -273,21 +277,45 @@ const LIGHT = {
 
 let greeted = false
 
-export default function Cabin({ pokemon, loading, error, link, onLink, pulse, onPokemonDialogue, shiny, onShiny }) {
+export default function Cabin() {
   const { time, isFriday } = useClock()
   const [message, setMessage] = useState(null) // { id, pages } while the text box is up
   const light = LIGHT[time]
 
+  // The Pokédex this scene calls in, and where it stands. It arrives folded shut,
+  // so visitors get to discover that it opens (the hinge, or a Pokémon dialogue).
+  const dex = usePokedex({ startClosed: true })
+  const { pokemon, loading, error, shiny, setShiny, select, setClosed } = dex
+  const placement = useDexPlacement()
+
+  // The wall screen's link to the Pokédex (see link.js): its flashes are echoed
+  // by the Pokédex's lights. Switching the screen off also folds the Pokédex shut.
+  const { link, pressLink, pulse } = useLink()
+  function pressLinkButton() {
+    if (link === 'on') setClosed(true)
+    pressLink()
+  }
+
+  // The Pokédex trigger pulse: when a dialogue about a Pokémon starts here
+  // (clicking a visitor in the porthole, Mew under the truck, MissingNo.), the
+  // Pokédex turns to that Pokémon and its sensor lights up: to 75%, held 0.2 s,
+  // then fading out (index.css). After that the dialogue has nothing to do with
+  // it. If the Pokédex is folded shut, it opens first. `dexTriggerPulse` counts
+  // the pulses, to restart the glow.
+  const [dexTriggerPulse, setDexTriggerPulse] = useState(0)
+  const startPokemonDialogue = useCallback(id => {
+    setClosed(false) // folded shut? it opens, as if you'd clicked the hinge
+    select(id)
+    setDexTriggerPulse(n => n + 1)
+  }, [select, setClosed])
+
   // Every message gets a new id, so the text box starts over even for the same words.
   // A message about a Pokémon also names it (its Pokédex number): that's a
-  // Pokémon dialogue, and starting one fires the Pokédex trigger pulse (App.jsx).
+  // Pokémon dialogue, and starting one fires the Pokédex trigger pulse.
   const say = useCallback((pages, pokemonId) => {
     setMessage(m => ({ id: (m?.id ?? 0) + 1, pages }))
-    if (pokemonId !== undefined) onPokemonDialogue(pokemonId)
-  }, [onPokemonDialogue])
-
-  // The wall screen's link to the Pokédex (`link`, `onLink`, `pulse`) lives in
-  // link.js, so the Pokédex can flash along with it.
+    if (pokemonId !== undefined) startPokemonDialogue(pokemonId)
+  }, [startPokemonDialogue])
 
   // Easter egg: MissingNo. (No.000) does what it did in Red and Blue.
   useEffect(() => {
@@ -306,6 +334,7 @@ export default function Cabin({ pokemon, loading, error, link, onLink, pulse, on
   }, [])
 
   return (
+    <>
     <div className="cabin">
       <svg
         className="cabin-scene"
@@ -326,12 +355,16 @@ export default function Cabin({ pokemon, loading, error, link, onLink, pulse, on
 
         {/* things that make their own light, or show the light outside */}
         <ScreenGlow pokemon={pokemon} strength={light.glow} link={link} />
-        <WallScreen pokemon={pokemon} loading={loading} error={error} link={link} onLink={onLink} pulse={pulse} shiny={shiny} onShiny={onShiny} />
+        <WallScreen pokemon={pokemon} loading={loading} error={error} link={link} onLink={pressLinkButton} pulse={pulse} shiny={shiny} onShiny={() => setShiny(s => !s)} />
         <PortholeView time={time} isFriday={isFriday} say={say} />
         <Lamp lit={time !== 'day'} />
       </svg>
 
       {message && <TextBox key={message.id} pages={message.pages} onDone={() => setMessage(null)} />}
     </div>
+
+    {/* the Pokédex, called into the cabin once we know where it stands */}
+    {placement && <Pokedex dex={dex} placement={placement} pulse={pulse} triggerPulse={dexTriggerPulse} />}
+    </>
   )
 }
