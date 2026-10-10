@@ -1,0 +1,803 @@
+/* Our Pokédex styles, loaded after fanta.css so these win where both apply. */
+
+/* Pixel fonts from Google Fonts: Press Start 2P (Game Boy style) and VT323 (old LCD). */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+
+:root {
+  color-scheme: light;
+  /* Worn, matte paint, sampled from the reference render (see design/shape-study) */
+  --dex-red: #a9332f;
+  --dex-red-light: #b8413a;
+  --dex-red-dark: #5e1a17;
+  --lcd: #f1f2ea;       /* screen background */
+  --ink: #1e2420;       /* screen text */
+  --plastic-dark: #1d1a19;
+  --key-blue: #47677a;
+  /* Small tiling textures for the HTML parts (buttons, bezel, panels):
+     fine grain, and pale scuffs where the surface has been rubbed. */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0 0 0 -.22'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+  --scuff: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.05' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .95 0 0 0 0 .9 0 0 0 0 .86 0 2.2 0 0 -1.2'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
+  --pixel-font: 'Press Start 2P', monospace;
+  --lcd-font: 'VT323', monospace;
+}
+
+body {
+  background: #120c10; /* the dark behind the cabin, shown until it's drawn */
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* The Pokédex's spot in the cabin: on the fold-out table. Cabin.jsx works out
+   where that is for the window's size and sets --dex-x, --dex-y and --dex-scale. */
+.dex-stage {
+  position: fixed;
+  left: var(--dex-x, 67vw);
+  top: var(--dex-y, 72vh);
+  width: 764.4px;
+  height: 568px;
+  transform: translate(-50%, -50%) scale(var(--dex-scale, 0.8));
+}
+
+/* ============ The device: left half, hinge, lid ============
+
+   All sizes and positions come from the measured device (src/shape.js,
+   design/shape-study/README.md), in px with the base 568 tall (1 mm = 3.78 px).
+   Heights above the table: base 22.7, head 31, hinge 42.7 (= closed),
+   lid rim 17.4, lid floor 11.3. Seen slightly from above, a surface at height z
+   is drawn (22.7 - z) / 2 lower than its plan position. */
+
+.pokedex {
+  position: relative;
+  flex: none;
+  width: 764.4px;  /* base 356, hinge, lid 356: the lid mirrors the base over the hinge */
+  height: 568px;
+  perspective: 2200px; /* gives the folding lid real 3D depth */
+  transition: transform 0.9s cubic-bezier(0.6, 0, 0.3, 1);
+  /* drop-shadow follows the real outline (incl. the curves), unlike box-shadow */
+  filter: drop-shadow(0 18px 20px rgba(0, 0, 0, 0.4)); /* shadow on the ground */
+}
+
+/* Closed, only the base and hinge are left (403.6 wide): slide it so it stays centred. */
+.pokedex.closed {
+  transform: translateX(180.4px);
+}
+
+/* The plastic body (SVG, see components/Shell.jsx). It draws outside its box:
+   sides hang below, taller parts reach above. */
+.body {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+.body-side      { fill: var(--dex-red-dark); }
+.base-face      { fill: url(#base-face); }
+.head-side      { fill: #6e1f1b; }
+.head-face      { fill: url(#head-face); }
+.hinge-body     { fill: url(#hinge-shade); }
+.hinge-end      { fill: #4a1512; }
+.hinge-end-rim  { fill: none; stroke: rgba(230, 150, 130, 0.35); stroke-width: 1.2; } /* worn edge of the end */
+.lid-wall       { fill: #521614; }
+.lid-floor-face { fill: url(#lid-floor); }
+.lid-rim        { fill: url(#lid-rim); }
+.lid-back-face  { fill: url(#lid-back); }
+.lid-gap        { fill: rgba(30, 6, 4, 0.7); } /* shadow in the slit between closed lid and base */
+.lid-triangle   { fill: #b08835; }
+.grip-line      { fill: rgba(0, 0, 0, 0.3); }
+
+/* Wear (see <Wear> in Shell.jsx) */
+.scratch        { fill: none; stroke: rgba(255, 226, 214, 0.16); stroke-width: 0.5; stroke-linecap: round; }
+.scratch.deep   { stroke: rgba(255, 232, 222, 0.3); stroke-width: 0.7; }
+.edge-wear      { fill: none; stroke: #e3a491; stroke-width: 4; opacity: 0.4; } /* paint rubbed off the edges */
+.edge-grime     { fill: none; stroke: rgba(45, 10, 6, 0.4); stroke-width: 16; }
+.edge-shine     { fill: none; stroke: rgba(255, 228, 218, 0.3); stroke-width: 1.2; }
+
+/* Hinge knuckles: a leaf joins each knuckle to its half; next to the other half's knuckles the gap is open */
+.leaf           { fill: #982c29; }
+.knuckle-seam   { fill: none; stroke: rgba(25, 4, 2, 0.85); stroke-width: 1.2; }
+.knuckle-seam-light { fill: none; stroke: rgba(255, 200, 185, 0.25); stroke-width: 0.8; }
+
+.half-left,
+.lid {
+  position: absolute;
+  top: 0;
+  width: 356px;
+  height: 568px;
+}
+.half-left { left: 0; }
+
+/* Each part is placed at its measured spot on its half. */
+.half-left > *,
+.lid-floor > * {
+  position: absolute;
+}
+
+/* The hinge is a button: click it to fold the lid shut or open it. */
+.pokedex .hinge {
+  position: absolute;
+  top: 0;
+  left: 360.85px; /* centre line 382.2, 42.7 across */
+  width: 42.7px;
+  height: 568px;
+  background: none;
+  border-radius: 0;
+  cursor: pointer;
+}
+.pokedex .hinge:hover { filter: brightness(1.15); }
+/* No box-shaped focus ring around the cylinder; keyboard focus glows along its shape instead */
+.pokedex .hinge:focus { outline: none; }
+.pokedex .hinge:focus-visible { filter: brightness(1.15) drop-shadow(0 0 3px rgba(255, 240, 230, 0.9)); }
+
+/* The lid turns around the hinge's centre line (26.2 to the left of the lid). */
+.lid {
+  left: 408.4px;
+  transform-origin: -26.2px 50%;
+  transform-style: preserve-3d; /* keep its two faces in 3D */
+  transition: transform 0.9s cubic-bezier(0.6, 0, 0.3, 1);
+  will-change: transform; /* paint the worn texture once, not on every frame of the fold */
+}
+.pokedex.closed .lid {
+  transform: rotateY(-180deg);
+}
+
+/* Each face hides when it's turned away from you, like the two sides of a page. */
+.lid-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* The controls sit on the lid's floor, which is lower than the rim (11.3 vs 22.7). */
+.lid-floor {
+  position: absolute;
+  inset: 0;
+  transform: translateY(5.7px);
+}
+
+/* Outside: turned to face the back. Only the plastic itself is clickable. */
+.lid-outside {
+  transform: rotateY(180deg);
+  pointer-events: none;
+}
+.lid-outside .lid-back-face {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pokedex,
+  .lid { transition: none; }
+}
+
+/* ============ Lens and status lights (on the raised head, 31 high) ============ */
+
+.half-left > .head-parts {
+  inset: 0;
+  transform: translateY(-4.15px);
+  pointer-events: none;
+}
+.head-parts > * {
+  position: absolute;
+  pointer-events: auto;
+}
+
+/* The sensor: flat, dark smoked glass in a thin chrome ring. It keeps the
+   sky's reflections (glint, two clouds, haze) but dimmed by the tint. */
+.lens {
+  left: 27.4px;
+  top: 25.1px;
+  width: 78.4px;
+  height: 78.4px;
+  border-radius: 50%;
+  /* the chrome ring (8 wide), polished but scuffed */
+  background:
+    conic-gradient(from 210deg, #f2f2ee, #8f908c 22%, #d9d9d4 42%, #6e6f6b 64%, #c9c9c4 82%, #f2f2ee);
+  box-shadow:
+    0 0 0 1.5px #3b100e,        /* the seat it's set into */
+    0 3px 0 #4f4f4c,            /* the ring stands 1.5 mm proud */
+    0 4px 3px rgba(0, 0, 0, 0.35);
+}
+.lens::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 30% 27%, rgba(255, 255, 255, 0.85) 0 2.5px, rgba(255, 255, 255, 0.25) 4px, transparent 7px),
+    radial-gradient(ellipse 22% 10% at 64% 64%, rgba(170, 205, 235, 0.22), transparent),
+    radial-gradient(ellipse 14% 8% at 52% 70%, rgba(170, 205, 235, 0.16), transparent),
+    linear-gradient(155deg, rgba(190, 215, 240, 0.13) 0 34%, transparent 34.5%), /* flat glass: one straight reflection */
+    #141a1f;
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.85),
+    inset 0 1px 2px rgba(0, 0, 0, 0.6);
+  transition: background-color 0.3s;
+}
+
+/* Scanning: the glass lights up from inside. */
+.lens.scanning::before {
+  animation: scan 0.7s ease-in-out infinite alternate;
+}
+
+@keyframes scan {
+  to {
+    background-color: #2b5f80;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.85), inset 0 0 14px rgba(127, 201, 240, 0.8), 0 0 12px 2px rgba(127, 201, 240, 0.5);
+  }
+}
+
+.head-parts .led { top: 24.9px; width: 22px; height: 22px; }
+.head-parts .led-red    { left: 102.9px; }
+.head-parts .led-yellow { left: 137.4px; }
+.head-parts .led-green  { left: 171.9px; }
+
+/* An LED is dim when off, bright and glowing with the class "on".
+   Each one sits in a dark socket. */
+.led {
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 2px solid #3a0f0d;
+  background:
+    radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.55), transparent 45%),
+    var(--led);
+  filter: brightness(0.4) saturate(0.7);
+  transition: filter 0.2s, box-shadow 0.2s;
+}
+.led.on {
+  filter: none;
+  box-shadow: 0 0 10px var(--led);
+}
+.led:not(.on) { box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5); }
+.led.small { width: 13px; height: 13px; }
+.led.blinking { animation: blink 0.5s steps(2) infinite; }
+
+@keyframes blink {
+  50% { filter: brightness(0.4) saturate(0.7); box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5); }
+}
+
+.led-red    { --led: #ef1712; }
+.led-yellow { --led: #f0b31c; }
+.led-green  { --led: #2dcb27; }
+
+/* ============ Screens (shared) ============ */
+
+.screen {
+  background: var(--lcd);
+  color: var(--ink);
+  border-radius: 3px;
+  box-shadow:
+    inset 0 0 0 1.5px rgba(0, 0, 0, 0.55),  /* the dark edge where glass meets the frame */
+    inset 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* fanta.css gives every element its own font, so set ours on all children too. */
+.main-screen,
+.main-screen * {
+  font-family: var(--pixel-font);
+}
+.info-screen,
+.info-screen *,
+.readout {
+  font-family: var(--lcd-font);
+}
+
+/* Game Boy style divider: a line with little squares on it */
+.dex-line {
+  height: 8px;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 18px, var(--lcd) 18px 21px, transparent 21px 40px) center / 100% 2px no-repeat,
+    repeating-linear-gradient(90deg, transparent 0 16px, var(--ink) 16px 23px, transparent 23px 40px) center / 100% 8px no-repeat,
+    linear-gradient(var(--ink), var(--ink)) center / 100% 2px no-repeat;
+}
+
+/* ============ Main screen (left) ============ */
+
+.bezel {
+  left: 16.6px;
+  top: 157px;
+  width: 309px;
+  height: 259.3px;
+  border-radius: 9px;
+  /* worn grey plastic, darker at the edge */
+  background: var(--scuff), var(--grain), linear-gradient(170deg, #a9a9a5, #8f8f8b 55%, #7a7a76);
+  box-shadow: inset 0 0 0 1.5px rgba(40, 20, 15, 0.45), inset 0 -2px 0 rgba(0, 0, 0, 0.18);
+  /* the bottom-left corner is cut off at 45° */
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 42.7px 100%, 0 calc(100% - 42.7px));
+}
+
+/* the two small dots above the screen */
+.bezel-dots {
+  position: absolute;
+  left: 134.2px;
+  top: 9px;
+  display: flex;
+  gap: 13.1px;
+}
+.bezel-dots span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4a1714; /* two small dark holes */
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.6), 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.speaker {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  width: 34px;
+  height: 16px;
+  background: repeating-linear-gradient(to bottom, #3c3c3a 0 2px, transparent 2px 5px);
+}
+
+.main-screen {
+  position: absolute;
+  left: 25.9px;
+  top: 23.1px;
+  width: 266.1px;
+  height: 178.3px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.screen-message { font-size: 0.7rem; }
+
+.dex-page { width: 100%; transition: opacity 0.2s; }
+.dex-page.fading { opacity: 0.35; }
+
+.dex-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dex-sprite {
+  width: 136px;
+  height: 136px;
+  margin: -22px -14px -22px -20px; /* the sprite images have empty space around them */
+  flex-shrink: 0;
+  image-rendering: pixelated; /* keep the pixel art sharp when enlarged */
+  border-radius: 0;
+}
+
+.dex-facts p {
+  font-size: 0.5rem;
+  line-height: 2;
+  text-transform: uppercase;
+}
+.dex-facts .dex-name { font-size: 0.66rem; }
+
+.dex-no {
+  font-size: 0.58rem;
+  margin-top: 6px;
+}
+
+/* ============ Controls (left) ============ */
+
+.pokedex .round-button {
+  left: 19.1px;
+  top: 427.3px;
+  width: 45.2px;
+  height: 45.2px;
+  border-radius: 50%;
+  background: var(--scuff), var(--grain), radial-gradient(circle at 40% 35%, #3a3332, #1a1514 70%);
+}
+
+.pokedex .pill {
+  top: 439.7px;
+  height: 16.9px;
+  border-radius: 5px;
+}
+.pokedex .pill-red  { left: 78.4px;  width: 61.8px; background: var(--scuff), var(--grain), linear-gradient(#a04a42, #8a3a34); }
+.pokedex .pill-blue { left: 153.1px; width: 63.7px; background: var(--scuff), var(--grain), linear-gradient(#6a7b84, #55656e); }
+
+/* The D-pad is one black cross: a solid cross behind the four arms, with the
+   side drawn around the whole cross, so nothing of the red shows between them. */
+.dpad {
+  left: 226.6px;
+  top: 433.1px;
+  background:
+    linear-gradient(var(--plastic-dark), var(--plastic-dark)) center / 31.13px 100% no-repeat,
+    linear-gradient(var(--plastic-dark), var(--plastic-dark)) center / 100% 31.13px no-repeat;
+  filter:
+    drop-shadow(0 4px 0 #0c0a09)                 /* its side */
+    drop-shadow(0 4px 4px rgba(20, 2, 0, 0.35)); /* shadow on the device */
+  display: grid;
+  grid-template-columns: repeat(3, 31.13px);
+  grid-template-rows: repeat(3, 31.13px);
+  grid-template-areas:
+    '.    up     .'
+    'left center right'
+    '.    down   .';
+}
+.dpad-up     { grid-area: up;    border-radius: 5px 5px 0 0; }
+.dpad-down   { grid-area: down;  border-radius: 0 0 5px 5px; }
+.dpad-left   { grid-area: left;  border-radius: 5px 0 0 5px; }
+.dpad-right  { grid-area: right; border-radius: 0 5px 5px 0; }
+.dpad-center {
+  grid-area: center;
+  background: radial-gradient(circle, #0f0d0c 0 6px, var(--plastic-dark) 7px); /* the dimple */
+}
+
+.base-panel {
+  left: 73.5px;
+  top: 484.8px;
+  width: 122.3px;
+  height: 55px;
+}
+
+/* The maker's name, pressed into the plastic at the bottom right */
+.brand {
+  right: 14px;
+  top: 540px;
+  font-family: var(--pixel-font);
+  font-size: 0.42rem;
+  color: rgba(40, 8, 6, 0.55);
+  text-shadow: 0 1px 0 rgba(255, 210, 195, 0.18);
+  pointer-events: none;
+}
+
+/* A shallow pocket in the plastic: shadow along its top edge, worn light along the bottom */
+.recessed-panel {
+  border-radius: 7px;
+  background: var(--grain), rgba(40, 6, 4, 0.12);
+  box-shadow:
+    inset 0 3px 4px rgba(20, 2, 0, 0.45),
+    inset 0 0 0 1px rgba(30, 4, 2, 0.35),
+    0 1px 0 rgba(255, 205, 190, 0.18);
+}
+
+/* ============ Right half: the lid's floor ============ */
+
+.info-screen {
+  left: 27.6px;
+  top: 205.3px;
+  width: 250.6px;
+  height: 113.6px;
+  padding: 5px 10px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  font-size: 1.1rem;
+  line-height: 1.1;
+  scrollbar-color: #999 transparent;
+}
+.info-screen > * { flex-shrink: 0; }
+
+.screen-title {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.55;
+  margin-bottom: 2px;
+}
+
+.hint { opacity: 0.6; }
+
+.entry-text {
+  font-size: 1.2rem;
+  line-height: 1.05;
+}
+
+.types {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 3px;
+}
+
+.type-badge {
+  color: white;
+  padding: 0 8px;
+  border-radius: 999px;
+  text-transform: capitalize;
+  line-height: 1.15;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.35);
+}
+
+/* Six stats in two columns of three, so they fit the short screen */
+.stat-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 10px;
+}
+.stat-list li {
+  display: grid;
+  grid-template-columns: 50px 1fr 20px;
+  align-items: center;
+  gap: 4px;
+  line-height: 1.2;
+}
+.stat-bar {
+  height: 6px;
+  background: rgba(0, 0, 0, 0.12);
+}
+.stat-bar span {
+  display: block;
+  height: 100%;
+  background: var(--ink);
+}
+
+.move-detail {
+  position: sticky;
+  top: -5px;
+  background: var(--lcd);
+  padding: 2px 0 4px;
+  margin-bottom: 4px;
+  border-bottom: 2px solid var(--ink);
+}
+.move-detail strong { text-transform: uppercase; }
+
+.move-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.sprite-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+.sprite-grid figure { text-align: center; }
+.sprite-grid img {
+  width: 72px;
+  margin: -12px -8px -10px;
+  image-rendering: pixelated;
+  border-radius: 0;
+}
+.sprite-grid figcaption { opacity: 0.7; font-size: 0.9rem; line-height: 0.85; }
+
+/* List mode: the list fills the rest of the screen and scrolls by itself */
+.info-screen > .list-screen {
+  position: relative; /* so the auto-scroll can measure items inside it */
+  flex: 1 1 0;
+  min-height: 0;
+  list-style: none;
+  overflow-y: auto;
+}
+
+.dex-number { opacity: 0.55; }
+
+/* Keypad: two rows of five keys plus a wide one, packed in a dark frame */
+.keypad {
+  left: 37.8px;
+  top: 331.9px;
+  width: 208.1px;
+  height: 67.5px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr) 1.5fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 4px;
+  background: #1a1f24; /* dark seams between the keys */
+}
+
+.lid-led-1 { left: 47.1px; top: 413.4px; }
+.lid-led-2 { left: 71px;   top: 413.4px; }
+
+.pokedex .black-slit {
+  top: 414.9px;
+  height: 13.2px;
+  border-radius: 999px;
+  background: var(--scuff), var(--grain), var(--plastic-dark);
+}
+.pokedex .slit-1 { left: 138.2px; width: 56px; }
+.pokedex .slit-2 { left: 205.4px; width: 57.4px; }
+
+.arrow-buttons {
+  left: 40.7px;
+  top: 441.3px;
+  width: 83.5px;
+  height: 34.9px;
+  display: flex;
+  gap: 2px;
+}
+
+.pokedex .yellow-button {
+  left: 233.3px;
+  top: 441.2px;
+  width: 32.2px;
+  height: 32.2px;
+  border-radius: 50%;
+  border: 3px solid #2b211c; /* dark collar around it */
+  background: var(--scuff), var(--grain), radial-gradient(circle at 40% 35%, #c9a554, #a37c2c 70%);
+}
+
+/* The two recessed panels at the bottom: keypad readout and search box */
+.lid-floor .lid-panel-1,
+.lid-floor .lid-panel-2 {
+  top: 498.4px;
+  width: 117.1px;
+  height: 47px;
+}
+.lid-floor .lid-panel-1 { left: 24.7px; }
+.lid-floor .lid-panel-2 { left: 154.5px; }
+
+.readout {
+  display: flex;
+  align-items: center;
+  padding: 4px 10px;
+  font-size: 1.15rem;
+  line-height: 1;
+  color: #f0d6c8;
+  background: var(--grain), #6a1f1b;
+  overflow: hidden;
+}
+
+/* The search box is an <input> styled to look like the other readout panel. */
+.pokedex .search-box {
+  border: none;
+  border-radius: 7px;
+  background: var(--grain), #6a1f1b;
+  color: #f0d6c8;
+}
+.pokedex .search-box::placeholder { color: #f0d6c8; opacity: 0.45; }
+.pokedex .search-box:focus { outline: 2px solid rgba(240, 214, 200, 0.45); }
+
+/* ============ Buttons ============ */
+
+/* Undo fanta.css's button look inside the device... */
+.pokedex button {
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  width: auto;
+  transform: none;
+  transition: transform 80ms, box-shadow 80ms;
+}
+.pokedex button:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* ...flat buttons that are part of a screen (moves, list entries)... */
+.move-grid button,
+.list-screen button {
+  background: transparent;
+  color: var(--ink);
+  text-transform: uppercase;
+  font-size: 1.05rem;
+}
+.move-grid button {
+  padding: 0 5px;
+  border: 2px solid var(--ink);
+}
+.list-screen button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0 6px;
+}
+.move-grid button:hover,
+.list-screen button:hover { background: rgba(0, 0, 0, 0.08); }
+/* selected = inverted colours, like a Game Boy menu */
+.move-grid button.active,
+.list-screen button.selected {
+  background: var(--ink);
+  color: var(--lcd);
+}
+
+/* ...and the physical buttons, which stick out of the device. */
+.pokedex :is(.round-button, .pill, .dpad button, .black-slit, .yellow-button, .grey-button) {
+  transform: none;
+  box-shadow:
+    0 4px 0 rgba(0, 0, 0, 0.5),              /* the button's side */
+    0 5px 6px rgba(20, 2, 0, 0.3),           /* shadow on the device */
+    inset 0 1px 0 rgba(255, 255, 255, 0.18), /* worn edge catching the light */
+    inset 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+/* Pressed (while clicking, or the active choice): pushed into the device. */
+.pokedex :is(.round-button, .pill, .dpad button, .black-slit, .yellow-button, .grey-button):active,
+.pokedex :is(.round-button, .pill, .dpad button, .black-slit, .yellow-button, .grey-button).pressed {
+  transform: translateY(3px);
+  box-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.45),
+    inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Matte black, no printed arrows: the shape says it all (the glyphs are barely there) */
+.dpad button {
+  background: var(--scuff), var(--grain), var(--plastic-dark);
+  color: #2e2a28;
+  font-size: 0.6rem;
+}
+/* The side belongs to the whole cross (see .dpad); a pressed arm sinks in
+   place instead of sliding away from the others. */
+.pokedex .dpad button,
+.pokedex .dpad button:active {
+  transform: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+.pokedex .dpad button:active {
+  background: var(--grain), #121010;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* No focus rectangles on the device's buttons after a click; keyboard focus gets a soft ring. */
+.pokedex button:focus:not(:focus-visible) { outline: none; }
+.pokedex button:focus-visible { outline: 2px solid rgba(255, 240, 230, 0.6); outline-offset: -2px; }
+
+.pokedex .grey-button {
+  flex: 1;
+  height: 100%;
+  border-radius: 5px;
+  background: var(--scuff), var(--grain), linear-gradient(#8a8988, #64635f);
+  color: #b8b7b4; /* embossed arrows */
+  font-size: 0.8rem;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.45);
+}
+
+/* Keys: their own, flatter bevel so the tight grid doesn't overlap */
+.pokedex .key {
+  border-radius: 3px;
+  background: var(--scuff), var(--grain), linear-gradient(#52758a, var(--key-blue));
+  color: #e1e8ec;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.35);
+}
+.pokedex .key:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.45);
+}
+.key-digit,
+.key-letters {
+  font-family: var(--pixel-font);
+  line-height: 1;
+}
+.key-digit { font-size: 0.5rem; }
+.key-letters {
+  font-size: 0.3rem;
+  height: 0.3rem;
+  margin-top: 3px;
+  opacity: 0.75;
+}
+.key-wide .key-digit { font-size: 0.42rem; }
+
+/* ============ Small screens: stack the halves ============ */
+
+/* Narrower than the open device: stack them like a phone-sized Pokédex. */
+@media (max-width: 799px) {
+  body { overflow: auto; padding: 1.5rem 1rem; }
+  /* the cabin as a picture on top (see cabin.css), the Pokédex below it */
+  #root { display: flex; flex-direction: column; align-items: center; }
+  .dex-stage {
+    position: static;
+    width: auto;
+    height: auto;
+    transform: none;
+  }
+  .pokedex {
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    height: auto;
+  }
+  .half-left,
+  .lid {
+    position: relative;
+    left: auto;
+  }
+  .lid { margin-top: -24px; } /* its top edge starts 47 down, at the hinge side */
+  /* Stacked halves don't fold, so there is no hinge (nor its leaves). */
+  .pokedex .hinge,
+  .body .hinge-part { display: none; }
+  .pokedex.closed,
+  .pokedex.closed .lid { transform: none; }
+  .lid-outside { display: none; }
+}
+
+/* Phones narrower than one half (356 + margins): shrink the whole device. */
+@media (max-width: 387px) { .pokedex { zoom: 0.88; } }
+@media (max-width: 340px) { .pokedex { zoom: 0.78; } }

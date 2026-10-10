@@ -1,0 +1,154 @@
+/* The S.S. Anne cabin around the Pokédex (see Cabin.jsx).
+   All movement here steps from frame to frame instead of gliding,
+   the way a Game Boy animates. */
+
+/* The cabin fills the window, behind the Pokédex. */
+.cabin {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: #120c10;
+}
+.cabin-scene {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.cabin .clickable { cursor: pointer; }
+
+/* Sprites stay sharp when blown up */
+.pixel-image { image-rendering: pixelated; }
+
+.screen-text {
+  font-family: var(--pixel-font);
+  font-size: 6px;
+  fill: #f8f8f0;
+}
+.plaque-text {
+  font-family: var(--pixel-font);
+  font-size: 4px;
+  fill: #57301a;
+}
+
+/* The link button blinks while it connects the screen to the Pokédex */
+.link-blink { animation: blink 0.3s steps(1, end) infinite; }
+
+/* ...while the screen searches: three dots light up in turn */
+.search-dot { opacity: 0.15; animation: search-dot 0.9s steps(1, end) infinite; }
+.search-dot-1 { animation-delay: 0.3s; }
+.search-dot-2 { animation-delay: 0.6s; }
+@keyframes search-dot {
+  0% { opacity: 1; }
+  33% { opacity: 0.15; }
+}
+
+/* ...and once linked, the picture flashes on: white, fading out in three steps */
+.power-on { opacity: 0; animation: power-on 0.36s steps(3, end); }
+@keyframes power-on {
+  from { opacity: 0.9; }
+  to { opacity: 0; }
+}
+
+/* Idle intro (Gengar vs Nidorino): Nidorino hops on the spot */
+.intro-hop { animation: hop 1.2s steps(1, end) infinite; }
+@keyframes hop {
+  0% { transform: translateY(0); }
+  55% { transform: translateY(-5px); }
+  70% { transform: translateY(-3px); }
+  85% { transform: translateY(-1px); }
+}
+
+/* MissingNo.: the glitched picture flickers between two scrambles */
+.glitch-a { animation: blink 0.36s steps(1, end) infinite; }
+
+/* The ship rocks, so the view out of the porthole bobs by a pixel */
+.rock { animation: rock 3.2s steps(1, end) infinite; }
+@keyframes rock {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(1px); }
+}
+
+/* Waves: the patterns repeat every 16 / 8 pixels, so sliding by that much loops seamlessly */
+.waves-far { animation: waves-far 6s steps(16) infinite; }
+@keyframes waves-far { to { transform: translateX(-16px); } }
+.waves-near { animation: waves-near 1.6s steps(8) infinite; }
+@keyframes waves-near { to { transform: translateX(-8px); } }
+
+.twinkle { animation: blink 1.4s steps(1, end) infinite; }
+.sparkle { animation: blink 0.2s steps(1, end) infinite; }
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* The lamp's four frames, each shown for a quarter of the cycle.
+   With these delays they come up in the order 1, 4, 3, 2: middle, right, middle, left. */
+.lamp-frame { opacity: 0; animation: lamp 2.8s steps(1, end) infinite; }
+.lamp-frame:nth-of-type(2) { animation-delay: -0.7s; }
+.lamp-frame:nth-of-type(3) { animation-delay: -1.4s; }
+.lamp-frame:nth-of-type(4) { animation-delay: -2.1s; }
+@keyframes lamp {
+  0% { opacity: 1; }
+  25% { opacity: 0; }
+}
+
+/* The dialogue box, Pokémon Red and Blue style: white, with a double black border */
+.textbox {
+  position: fixed;
+  left: max(12px, 2vw);
+  bottom: max(12px, 3vh);
+  z-index: 10;
+  width: min(600px, 46vw);
+  min-height: 6.2em;
+  padding: 1.3em 1.6em;
+  background: #f8f8f0;
+  color: #20181c;
+  border: 4px solid #20181c;
+  border-radius: 6px;
+  box-shadow:
+    inset 0 0 0 3px #f8f8f0,
+    inset 0 0 0 6px #20181c,
+    0 6px 0 rgba(0, 0, 0, 0.35);
+  font-size: clamp(10px, 0.95vw, 15px);
+  line-height: 2;
+  cursor: pointer;
+  user-select: none;
+}
+.textbox,
+.textbox * {
+  font-family: var(--pixel-font);
+}
+.textbox p { margin: 0; }
+.textbox-arrow {
+  position: absolute;
+  right: 1.4em;
+  bottom: 1em;
+  font-size: 0.8em;
+  animation: blink 0.8s steps(1, end) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rock, .waves-far, .waves-near, .twinkle, .intro-hop, .glitch-a { animation: none; }
+  .lamp-frame { animation: none; }
+  .lamp-frame:first-of-type { opacity: 1; }
+}
+
+/* Phones: the Pokédex stacks its halves (see index.css), and the cabin
+   becomes a 16:9 picture above it instead of filling the window. */
+@media (max-width: 799px) {
+  .cabin {
+    position: relative;
+    inset: auto;
+    flex: none;
+    width: calc(100% + 2rem);
+    margin: -1.5rem -1rem 1rem;
+    aspect-ratio: 16 / 9;
+  }
+  .textbox {
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    width: auto;
+    font-size: 11px;
+  }
+}

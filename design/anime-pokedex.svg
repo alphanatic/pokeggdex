@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1300 900" width="1300" height="900" font-family="system-ui, sans-serif">
+<defs>
+  <radialGradient id="lens" cx="0.4" cy="0.38" r="0.7"><stop offset="0" stop-color="#7fd0ff"/><stop offset="0.55" stop-color="#2f8be0"/><stop offset="1" stop-color="#14509f"/></radialGradient>
+  <linearGradient id="hinge" x1="0" x2="1"><stop offset="0" stop-color="#8a0e10"/><stop offset="0.4" stop-color="#ff5a4f"/><stop offset="1" stop-color="#9e1316"/></linearGradient>
+</defs>
+<rect width="1300" height="900" fill="#fbfaf7"/>
+<text x="60" y="52" font-size="26" font-weight="700" fill="#222">Pokédex, season 1 anime: how I read the design</text>
+<text x="60" y="80" font-size="15" fill="#666">Drawn flat from the front. Proportions are estimates from the episode stills.</text>
+<text x="60" y="108" font-size="13" font-weight="700" fill="#999" letter-spacing="2">OPEN</text>
+<text x="900" y="108" font-size="13" font-weight="700" fill="#999" letter-spacing="2">CLOSED</text>
+
+<!-- ===== OPEN: left half ===== -->
+<path d="M78,120 H420 V560 H78 Q60,560 60,542 V138 Q60,120 78,120 Z" fill="#e2231a" stroke="#8a0e10" stroke-width="3"/>
+<circle cx="120" cy="156" r="30" fill="#f4f4f4" stroke="#999" stroke-width="2"/>
+<circle cx="120" cy="156" r="23" fill="url(#lens)"/>
+<ellipse cx="112" cy="147" rx="7" ry="5" fill="#fff" opacity="0.85"/>
+<circle cx="170" cy="150" r="6" fill="#e53935" stroke="#5a0b0b" stroke-width="1.5"/>
+<circle cx="188" cy="150" r="6" fill="#fdd835" stroke="#5a0b0b" stroke-width="1.5"/>
+<circle cx="206" cy="150" r="6" fill="#43a047" stroke="#5a0b0b" stroke-width="1.5"/>
+<path d="M90,210 H390 V420 H130 L90,380 Z" fill="#f4f4f4" stroke="#999" stroke-width="2"/>
+<rect x="110" y="228" width="260" height="160" fill="#bfe3f5" stroke="#555" stroke-width="2"/>
+<circle cx="232" cy="219" r="3" fill="#e2231a"/><circle cx="248" cy="219" r="3" fill="#e2231a"/>
+<g stroke="#777" stroke-width="2"><line x1="335" y1="398" x2="375" y2="398"/><line x1="335" y1="404" x2="375" y2="404"/><line x1="335" y1="410" x2="375" y2="410"/></g>
+<rect x="90" y="450" width="100" height="60" rx="4" fill="#5cb85c" stroke="#2d6b2d" stroke-width="3"/>
+<rect x="220" y="462" width="70" height="10" rx="5" fill="#3a0a0a"/>
+<rect x="220" y="484" width="70" height="10" rx="5" fill="#3a0a0a"/>
+
+<!-- ===== OPEN: hinge ===== -->
+<rect x="420" y="128" width="30" height="424" rx="10" fill="url(#hinge)" stroke="#6d0a0c" stroke-width="2"/>
+
+<!-- ===== OPEN: right half (tall by the hinge, steps down at the outer end) ===== -->
+<path d="M450,120 H615 C640,120 635,190 660,190 H792 Q810,190 810,208 V542 Q810,560 792,560 H450 Z" fill="#e2231a" stroke="#8a0e10" stroke-width="3"/>
+<rect x="475" y="205" width="310" height="100" rx="4" fill="#151515"/>
+<rect x="480" y="322" width="262" height="72" rx="4" fill="#1d2a33"/>
+<rect x="484" y="326" width="48" height="30" rx="3" fill="#8fd3f5" stroke="#4a90b8" stroke-width="1.5"/><rect x="535.5" y="326" width="48" height="30" rx="3" fill="#8fd3f5" stroke="#4a90b8" stroke-width="1.5"/><rect x="587" y="326" width="48" height="30" rx="3" fill="#8fd3f5" stroke="#4a90b8" stroke-width="1.5"/><rect x="638.5" y="326" width="48" height="30" rx="3" fill="#8fd3f5" stroke="#4a90b8" stroke-width="1.5"/><rect x="690" y="326" width="48" height="30" rx="3" fill="#8fd3f5" stroke="#4a90b8" stroke-width="1.5"/><rect x="484" y="360" width="48" height="30" rx="3" fill="#8fd3f5" stroke="#4a90b8" stroke-width="1.5"/><rect x="535.5" y="360" width="48" height="30" rx="3" fill="#8fd3f5" stroke="#4a90b8" stroke-width="1.5"/><rect x="587" y="360" width="48" height="30" rx="3" fill="#8fd3f5" stroke="#4a90b8" stroke-width="1.5"/><rect x="638.5" y="360" width="48" height="30" rx="3" fill="#8fd3f5" stroke="#4a90b8" stroke-width="1.5"/><rect x="690" y="360" width="48" height="30" rx="3" fill="#8fd3f5" stroke="#4a90b8" stroke-width="1.5"/>
+<rect x="485" y="412" width="30" height="20" rx="3" fill="#f5f5f5" stroke="#999"/>
+<rect x="520" y="412" width="30" height="20" rx="3" fill="#f5f5f5" stroke="#999"/>
+<rect x="600" y="416" width="120" height="3" fill="#a3121a"/><rect x="600" y="424" width="90" height="3" fill="#a3121a"/>
+<rect x="480" y="470" width="110" height="44" rx="5" fill="#2a0d0d"/>
+<rect x="610" y="470" width="110" height="44" rx="5" fill="#2a0d0d"/>
+<circle cx="765" cy="492" r="14" fill="#f39c12" stroke="#a0620a" stroke-width="2"/>
+
+<!-- markers on the open view -->
+<g><circle cx="84" cy="132" r="11" fill="#222"/><text x="84" y="136" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">1</text></g><g><circle cx="228" cy="134" r="11" fill="#222"/><text x="228" y="138" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">2</text></g><g><circle cx="400" cy="228" r="11" fill="#222"/><text x="400" y="232" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">3</text></g><g><circle cx="76" cy="444" r="11" fill="#222"/><text x="76" y="448" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">4</text></g><g><circle cx="306" cy="467" r="11" fill="#222"/><text x="306" y="471" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">5</text></g>
+<g><circle cx="435" cy="580" r="11" fill="#222"/><text x="435" y="584" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">6</text></g><g><circle cx="795" cy="220" r="11" fill="#222"/><text x="795" y="224" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">7</text></g><g><circle cx="756" cy="340" r="11" fill="#222"/><text x="756" y="344" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">8</text></g><g><circle cx="500" cy="448" r="11" fill="#222"/><text x="500" y="452" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">9</text></g><g><circle cx="735" cy="422" r="11" fill="#222"/><text x="735" y="426" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">10</text></g>
+<g><circle cx="535" cy="532" r="11" fill="#222"/><text x="535" y="536" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">11</text></g><g><circle cx="792" cy="470" r="11" fill="#222"/><text x="792" y="474" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">12</text></g><g><circle cx="650" cy="150" r="11" fill="#222"/><text x="650" y="154" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">13</text></g>
+
+<!-- ===== CLOSED ===== -->
+<g transform="translate(900,130) scale(0.75)">
+  <path d="M18,0 H342 Q360,0 360,18 V422 Q360,440 342,440 H18 Q0,440 0,422 V18 Q0,0 18,0 Z" fill="#c81d16" stroke="#8a0e10" stroke-width="4"/>
+  <circle cx="60" cy="36" r="30" fill="#f4f4f4" stroke="#999" stroke-width="2"/>
+  <circle cx="60" cy="36" r="23" fill="url(#lens)"/>
+  <ellipse cx="52" cy="27" rx="7" ry="5" fill="#fff" opacity="0.85"/>
+  <circle cx="110" cy="30" r="6" fill="#e53935" stroke="#5a0b0b" stroke-width="1.5"/>
+  <circle cx="128" cy="30" r="6" fill="#fdd835" stroke="#5a0b0b" stroke-width="1.5"/>
+  <circle cx="146" cy="30" r="6" fill="#43a047" stroke="#5a0b0b" stroke-width="1.5"/>
+  <path d="M0,72 H150 C172,72 172,0 195,0 H342 Q360,0 360,18 V422 Q360,440 342,440 H18 Q0,440 0,422 Z" fill="#e2231a" stroke="#8a0e10" stroke-width="4"/>
+  <rect x="352" y="24" width="14" height="392" rx="7" fill="url(#hinge)" stroke="#6d0a0c" stroke-width="2"/>
+  <polygon points="28,124 40,102 52,124" fill="#f5b800" stroke="#a07800" stroke-width="2"/>
+  <g stroke="#9a1010" stroke-width="3"><line x1="25" y1="380" x2="95" y2="380"/><line x1="25" y1="390" x2="95" y2="390"/><line x1="25" y1="400" x2="95" y2="400"/><line x1="25" y1="410" x2="95" y2="410"/></g>
+  <g><circle cx="210" cy="40" r="11" fill="#222"/><text x="210" y="44" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">14</text></g><g><circle cx="72" cy="112" r="11" fill="#222"/><text x="72" y="116" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">15</text></g><g><circle cx="112" cy="395" r="11" fill="#222"/><text x="112" y="399" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">16</text></g>
+  <text x="180" y="490" font-size="18" fill="#666" text-anchor="middle">hinge on the right side</text>
+</g>
+
+<!-- legend -->
+<text x="60" y="618" font-size="12" font-weight="700" fill="#8a0e10" letter-spacing="1">LEFT HALF</text><g><circle cx="70" cy="636" r="11" fill="#222"/><text x="70" y="640" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">1</text></g><text x="88" y="640" font-size="14" fill="#333">Big blue lens (glows when scanning)</text><g><circle cx="70" cy="662" r="11" fill="#222"/><text x="70" y="666" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">2</text></g><text x="88" y="666" font-size="14" fill="#333">Status lights: red, yellow, green</text><g><circle cx="70" cy="688" r="11" fill="#222"/><text x="70" y="692" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">3</text></g><text x="88" y="692" font-size="14" fill="#333">Main screen, white bezel with a cut corner</text><g><circle cx="70" cy="714" r="11" fill="#222"/><text x="70" y="718" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">4</text></g><text x="88" y="718" font-size="14" fill="#333">Small green screen</text><g><circle cx="70" cy="740" r="11" fill="#222"/><text x="70" y="744" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">5</text></g><text x="88" y="744" font-size="14" fill="#333">Two thin slots (hard to see in the episodes)</text><text x="480" y="618" font-size="12" font-weight="700" fill="#8a0e10" letter-spacing="1">HINGE</text><g><circle cx="490" cy="636" r="11" fill="#222"/><text x="490" y="640" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">6</text></g><text x="508" y="640" font-size="14" fill="#333">Round hinge running the full height</text><text x="480" y="666" font-size="12" font-weight="700" fill="#8a0e10" letter-spacing="1">RIGHT HALF (the lid)</text><g><circle cx="490" cy="684" r="11" fill="#222"/><text x="490" y="688" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">7</text></g><text x="508" y="688" font-size="14" fill="#333">Wide black display</text><g><circle cx="490" cy="710" r="11" fill="#222"/><text x="490" y="714" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">8</text></g><text x="508" y="714" font-size="14" fill="#333">2 x 5 light-blue keys in a dark frame</text><g><circle cx="490" cy="736" r="11" fill="#222"/><text x="490" y="740" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">9</text></g><text x="508" y="740" font-size="14" fill="#333">Two small white buttons</text><g><circle cx="490" cy="762" r="11" fill="#222"/><text x="490" y="766" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">10</text></g><text x="508" y="766" font-size="14" fill="#333">Small printed text</text><g><circle cx="490" cy="788" r="11" fill="#222"/><text x="490" y="792" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">11</text></g><text x="508" y="792" font-size="14" fill="#333">Two dark rectangular pads</text><g><circle cx="490" cy="814" r="11" fill="#222"/><text x="490" y="818" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">12</text></g><text x="508" y="818" font-size="14" fill="#333">Orange round button</text><g><circle cx="490" cy="840" r="11" fill="#222"/><text x="490" y="844" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">13</text></g><text x="508" y="844" font-size="14" fill="#333">Step: tall by the hinge, low at the outer end</text><text x="900" y="618" font-size="12" font-weight="700" fill="#8a0e10" letter-spacing="1">CLOSED</text><g><circle cx="910" cy="636" r="11" fill="#222"/><text x="910" y="640" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">14</text></g><text x="928" y="640" font-size="14" fill="#333">The lid's low part leaves the lens + lights uncovered</text><g><circle cx="910" cy="662" r="11" fill="#222"/><text x="910" y="666" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">15</text></g><text x="928" y="666" font-size="14" fill="#333">Yellow triangle</text><g><circle cx="910" cy="688" r="11" fill="#222"/><text x="910" y="692" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">16</text></g><text x="928" y="692" font-size="14" fill="#333">Grip lines</text>
+</svg>
