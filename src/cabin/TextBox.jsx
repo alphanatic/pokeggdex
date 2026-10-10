@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
+
 
 // A dialogue box like in Pokémon Red and Blue: the text types itself out,
 // a ▼ blinks when the page is done, and a click goes to the next page.
@@ -24,6 +26,15 @@ export default function TextBox({ pages, onDone }) {
     return () => clearTimeout(timer)
   })
 
+  // A click on the window layer goes to the text box, except on things marked
+  // data-through-dialogue (the truck): those still get their own click, so the
+  // "click the truck 3 times" egg works while its messages are showing.
+  function catchClick(e) {
+    const under = document.elementsFromPoint(e.clientX, e.clientY).find(el => el.dataset?.throughDialogue)
+    if (under) under.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    else next()
+  }
+
   function next() {
     if (typing) return setShown(text.length) // first click: show the whole page
     if (page + 1 < pages.length) {
@@ -34,10 +45,18 @@ export default function TextBox({ pages, onDone }) {
     }
   }
 
-  return (
-    <div className="textbox" role="status" aria-live="polite" onClick={next}>
-      <p>{text.slice(0, shown)}</p>
-      {!typing && <span className="textbox-arrow" aria-hidden="true">▼</span>}
-    </div>
+  // Drawn straight into <body>, above both the cabin and the Pokédex.
+  return createPortal(
+    <>
+      {/* Like in the games, while someone is talking a click anywhere goes to
+          the text box: this invisible layer covers the whole window until the
+          last page closes, so nothing behind it gets clicked by accident. */}
+      <div className="textbox-catcher" onClick={catchClick} aria-hidden="true" />
+      <div className="textbox" role="status" aria-live="polite" onClick={next}>
+        <p>{text.slice(0, shown)}</p>
+        {!typing && <span className="textbox-arrow" aria-hidden="true">▼</span>}
+      </div>
+    </>,
+    document.body,
   )
 }

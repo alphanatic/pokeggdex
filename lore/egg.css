@@ -1,0 +1,225 @@
+/* The easter egg guide (/lore/), dressed like the S.S. Anne cabin on the
+   front page: cream striped wallpaper under a wooden beam, pixel fonts,
+   Red/Blue-style text boxes, Pokédex-screen tables and Poké Ball red. */
+
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=M+PLUS+Rounded+1c:wght@400;500;700;800&family=Press+Start+2P&family=VT323&display=swap');
+
+:root {
+  --ink: #20181c;
+  --cream: #f0e2bc;
+  --cream-d: #dcc898;
+  --cream-dd: #c4ab78;
+  --wood: #a8682f;
+  --wood-d: #7c4720;
+  --wood-dd: #57301a;
+  --brass: #d6a42c;
+  --brass-l: #f8de78;
+  --red: #e03838;
+  --red-d: #a82828;
+  --paper: #f8f8f0;
+  --lcd: #f1f2ea;
+  /* Fredoka for headings: bold and rounded, like the first TV concept.
+     M PLUS Rounded 1c for text: the same rounded look, with Japanese built in. */
+  --round: 'Fredoka', 'M PLUS Rounded 1c', sans-serif;
+  --text: 'M PLUS Rounded 1c', sans-serif;
+  --pixel: 'Press Start 2P', monospace;
+  --lcd-font: 'VT323', monospace;
+}
+
+* { box-sizing: border-box; }
+
+html { background: var(--wood-dd); }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--ink);
+  font-family: var(--text);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.65;
+  /* the cabin wallpaper: cream with a fine stripe */
+  background:
+    repeating-linear-gradient(90deg, var(--cream-d) 0 4px, transparent 4px 48px),
+    var(--cream);
+}
+
+/* the ceiling beam, with brass rivets */
+.beam {
+  height: 22px;
+  background:
+    radial-gradient(circle at 50% 50%, var(--brass-l) 0 2px, var(--brass) 2px 3px, transparent 3.5px) 0 50% / 96px 22px repeat-x,
+    var(--wood-d);
+  border-bottom: 4px solid var(--ink);
+  box-shadow: 0 4px 0 var(--cream-dd);
+}
+
+main {
+  width: 60vw;               /* the page takes up to 60% of the window's width */
+  margin: 0 auto;
+  padding: 40px 20px 80px;
+  container-type: inline-size; /* lets the title size its text to this width (cqw) */
+}
+
+/* the title, on a Poké Ball-red plate */
+.title {
+  margin: 0 0 6px;
+  padding: 22px 24px 18px;
+  background: var(--red);
+  color: var(--paper);
+  border: 4px solid var(--ink);
+  border-bottom-width: 10px; /* the Poké Ball's black band */
+  border-radius: 14px 14px 4px 4px;
+  box-shadow: inset 0 4px 0 #f46868, inset 0 -4px 0 var(--red-d);
+  font-family: var(--round);
+  font-weight: 700;
+  white-space: nowrap;
+  line-height: 1.1;
+  text-align: center;
+  /* an Exeggcute on each side of the title (see title.js) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+.title-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+/* "No.102 タマタマ": the Pokédex number in pixel type and the Japanese name,
+   above the title, like the first TV concept's "No.006 リザードン" */
+.kicker {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 0 var(--red-d);
+}
+.kicker .no { font-family: var(--pixel); font-size: 10px; margin-right: 8px; }
+.kicker .jp { font-family: var(--text); }
+.title-name {
+  /* One line, always: the text shrinks to fit the page's width. Fredoka bold
+     averages about 0.6em a letter, so the 24-letter title is about 13.5em;
+     210px is the rest of the line (padding, borders, the two sprites, the gaps). */
+  font-size: clamp(14px, calc((100cqw - 210px) / 13.5), 46px);
+  letter-spacing: 0.5px;
+  /* a thick dark outline and a drop, like the concept's name */
+  text-shadow:
+    -3px -3px 0 var(--red-d), 3px -3px 0 var(--red-d), -3px 3px 0 var(--red-d), 3px 3px 0 var(--red-d),
+    0 -3px 0 var(--red-d), 0 3px 0 var(--red-d), -3px 0 0 var(--red-d), 3px 0 0 var(--red-d),
+    0 6px 0 #5e1a17;
+}
+.title-mon {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  margin: -10px 0;
+  image-rendering: pixelated;
+}
+.title-mon[hidden] { display: none; }
+.title-mon.mirror { transform: scaleX(-1); } /* both face the title */
+.byline {
+  margin: 0 0 32px;
+  font-family: var(--pixel);
+  font-size: 11px;
+  color: var(--wood-d);
+}
+
+h2 {
+  margin: 48px 0 16px;
+  padding-bottom: 10px;
+  font-family: var(--round);
+  font-weight: 700;
+  font-size: clamp(22px, 3.4vw, 30px);
+  line-height: 1.3;
+  border-bottom: 4px solid var(--ink);
+  box-shadow: 0 4px 0 var(--cream-dd);
+}
+
+h3 {
+  margin: 34px 0 10px;
+  font-family: var(--round);
+  font-weight: 600;
+  font-size: 21px;
+  line-height: 1.4;
+  color: var(--wood-dd);
+}
+h3::before {
+  /* an Exeggcute egg before each egg (20 x 20 pixel art, like the energy icons) */
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin: 0 10px 0 0;
+  vertical-align: -5px;
+  background: url('./exeggcute-egg.png') center / 20px 20px no-repeat;
+  image-rendering: pixelated;
+}
+
+p { margin: 0 0 12px; }
+ul, ol { margin: 0 0 14px; padding-left: 30px; }
+li { margin: 0 0 6px; }
+li::marker { font-family: var(--round); font-weight: 700; color: var(--wood-dd); }
+strong { font-weight: 800; color: var(--wood-dd); }
+code {
+  font-family: var(--lcd-font);
+  font-size: 1.2em;
+  padding: 0 6px;
+  background: var(--lcd);
+  border: 2px solid var(--ink);
+  border-radius: 3px;
+}
+
+/* "Why it's there": a Red/Blue dialogue box, white with a double black border */
+.lore {
+  margin: 14px 0 6px;
+  padding: 16px 20px;
+  background: var(--paper);
+  border: 4px solid var(--ink);
+  border-radius: 6px;
+  box-shadow: inset 0 0 0 3px var(--paper), inset 0 0 0 6px var(--ink), 0 5px 0 var(--cream-dd);
+}
+.lore strong { color: var(--red-d); }
+
+/* tables look like the Pokédex's screens */
+.table-wrap {
+  overflow-x: auto;
+  margin: 0 0 16px;
+  border: 4px solid var(--ink);
+  border-radius: 6px;
+  box-shadow: 0 5px 0 var(--cream-dd);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--lcd);
+}
+th, td {
+  padding: 8px 12px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 2px solid var(--cream-d);
+}
+th {
+  font-family: var(--round);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: var(--ink);
+  color: var(--paper);
+}
+tr:last-child td { border-bottom: none; }
+
+.footnote { margin-top: 40px; font-size: 16px; color: var(--wood-d); }
+
+/* on narrow screens 60% would be cramped, so the page uses the full width */
+@media (max-width: 800px) {
+  main { width: 100%; }
+}
+@media (max-width: 560px) {
+  body { font-size: 16px; }
+  main { padding: 28px 14px 60px; }
+  .title { padding: 18px 10px 14px; gap: 6px; }
+}

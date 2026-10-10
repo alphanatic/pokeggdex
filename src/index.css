@@ -216,6 +216,45 @@ body {
   transition: background-color 0.3s;
 }
 
+/* The Pokédex trigger pulse (App.jsx): when a dialogue about a Pokémon starts,
+   the sensor lights up in a glow of light ocean blue, splashes of lavender, an
+   undertone of Bulbasaur green and a finishing coat of white-mixed light blue,
+   up to 75%, holds it 0.2 s, then fades to nothing. It's its own layer
+   (::after), so the glass's normal look underneath never changes.
+   (Separate from the link's flashes and from how long the dialogue lasts.) */
+.lens::after {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    /* the glint stays on top, so it still reads as glass */
+    radial-gradient(circle at 30% 27%, rgba(255, 255, 255, 0.95) 0 2.5px, rgba(255, 255, 255, 0.3) 4px, transparent 7px),
+    /* finishing coat: white-mixed light blue, strongest at the top */
+    linear-gradient(170deg, rgba(232, 246, 255, 0.55) 0%, rgba(214, 236, 252, 0.18) 45%, transparent 70%),
+    /* splashes of lavender */
+    radial-gradient(ellipse 34% 26% at 70% 38%, rgba(196, 172, 245, 0.75), transparent 70%),
+    radial-gradient(ellipse 24% 18% at 32% 66%, rgba(186, 160, 240, 0.6), transparent 70%),
+    /* the Bulbasaur-green undertone, low in the glass */
+    radial-gradient(ellipse 70% 40% at 50% 92%, rgba(122, 199, 76, 0.55), transparent 75%),
+    /* light ocean blue */
+    radial-gradient(circle at 45% 40%, #9ad6f5, #4fa4d8 60%, #2f74a8);
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.6),
+    inset 0 0 10px rgba(255, 255, 255, 0.35),
+    0 0 10px 2px rgba(150, 210, 245, 0.55);
+}
+.lens.dex-trigger-pulse::after { animation: dex-trigger-pulse 1.52s ease-out; }
+/* 0.12 s up to 75%, held until 0.32 s (0.2 s), then 1.2 s down to nothing */
+@keyframes dex-trigger-pulse {
+  0% { opacity: 0; }
+  7.9% { opacity: 0.75; }
+  21% { opacity: 0.75; }
+  100% { opacity: 0; }
+}
+
 /* Scanning: the glass lights up from inside. */
 .lens.scanning::before {
   animation: scan 0.7s ease-in-out infinite alternate;
@@ -256,6 +295,67 @@ body {
 @keyframes blink {
   50% { filter: brightness(0.4) saturate(0.7); box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5); }
 }
+
+/* Linked to the cabin's wall screen, the Pokédex echoes the screen's flash
+   0.2 s later, with the same timing (see .pulse-* in cabin/cabin.css): the
+   green light flips (lit dims to 30%, dark lights up), and the yellow light
+   glows faintly at 45%. "30%" here means 30% of the way from a light's off
+   look (brightness 0.4) to fully lit (1): set with --strength. */
+.led-green.on.link-pulse-1        { --strength: 0.3; animation: led-faint-once 0.16s steps(1, end) 0.2s; }
+.led-green.on.link-pulse-2        { --strength: 0.3; animation: led-faint-twice 0.44s steps(1, end) 0.2s; }
+.led-green.on.link-pulse-3        { --strength: 0.3; animation: led-faint-thrice 0.72s steps(1, end) 0.2s; }
+.led-green:not(.on).link-pulse-1  { animation: led-lit-once 0.16s steps(1, end) 0.2s; }
+.led-green:not(.on).link-pulse-2  { animation: led-lit-twice 0.44s steps(1, end) 0.2s; }
+.led-green:not(.on).link-pulse-3  { animation: led-lit-thrice 0.72s steps(1, end) 0.2s; }
+.led-yellow.link-pulse-1          { --strength: 0.45; animation: led-faint-once 0.16s steps(1, end) 0.2s; }
+.led-yellow.link-pulse-2          { --strength: 0.45; animation: led-faint-twice 0.44s steps(1, end) 0.2s; }
+.led-yellow.link-pulse-3          { --strength: 0.45; animation: led-faint-thrice 0.72s steps(1, end) 0.2s; }
+
+@keyframes led-lit-once {
+  0% { filter: none; box-shadow: 0 0 10px var(--led); }
+}
+@keyframes led-lit-twice {
+  0% { filter: none; box-shadow: 0 0 10px var(--led); }
+  36% { filter: brightness(0.4) saturate(0.7); box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5); }
+  64% { filter: none; box-shadow: 0 0 10px var(--led); }
+}
+@keyframes led-lit-thrice {
+  0% { filter: none; box-shadow: 0 0 10px var(--led); }
+  22.2% { filter: brightness(0.4) saturate(0.7); box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5); }
+  38.9% { filter: none; box-shadow: 0 0 10px var(--led); }
+  61.1% { filter: brightness(0.4) saturate(0.7); box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5); }
+  77.8% { filter: none; box-shadow: 0 0 10px var(--led); }
+}
+/* "faint": --strength of the way from off to fully lit. Between the two flashes
+   of a double, the light shows its normal look again: the base styles, which
+   these keyframes leave out at 36%. */
+@keyframes led-faint-once {
+  0% {
+    filter: brightness(calc(0.4 + 0.6 * var(--strength))) saturate(calc(0.7 + 0.3 * var(--strength)));
+    box-shadow: 0 0 calc(10px * var(--strength)) var(--led);
+  }
+}
+@keyframes led-faint-twice {
+  0% {
+    filter: brightness(calc(0.4 + 0.6 * var(--strength))) saturate(calc(0.7 + 0.3 * var(--strength)));
+    box-shadow: 0 0 calc(10px * var(--strength)) var(--led);
+  }
+  36% { filter: var(--rest-filter); box-shadow: var(--rest-shadow); }
+  64% {
+    filter: brightness(calc(0.4 + 0.6 * var(--strength))) saturate(calc(0.7 + 0.3 * var(--strength)));
+    box-shadow: 0 0 calc(10px * var(--strength)) var(--led);
+  }
+}
+@keyframes led-faint-thrice {
+  0%, 38.9%, 77.8% {
+    filter: brightness(calc(0.4 + 0.6 * var(--strength))) saturate(calc(0.7 + 0.3 * var(--strength)));
+    box-shadow: 0 0 calc(10px * var(--strength)) var(--led);
+  }
+  22.2%, 61.1% { filter: var(--rest-filter); box-shadow: var(--rest-shadow); }
+}
+/* each light's normal look, for the gaps between flashes */
+.led { --rest-filter: brightness(0.4) saturate(0.7); --rest-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5); }
+.led.on { --rest-filter: none; --rest-shadow: 0 0 10px var(--led); }
 
 .led-red    { --led: #ef1712; }
 .led-yellow { --led: #f0b31c; }

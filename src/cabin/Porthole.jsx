@@ -108,6 +108,8 @@ function pose(type, t) {
 }
 
 // What you hear when you click a visitor
+// (Each of these is a Pokémon dialogue: it's said with the visitor's number, so
+// the Pokédex turns to that Pokémon. See the Pokédex trigger pulse in App.jsx.)
 const TALK = {
   magikarp: ['MAN: Hello, there! Have I got a deal just for you!', "I'll let you have a swell MAGIKARP for just ¥500!", 'MAGIKARP used SPLASH! ...But nothing happened!'],
   tentacool: ['A wild TENTACOOL appeared!', 'The sea is full of them. Better stock up on REPELs before you SURF.'],
@@ -229,7 +231,7 @@ const NearWaves = memo(function NearWaves({ time }) {
   )
 })
 
-export function PortholeView({ time, isFriday, say, onFindMew }) {
+export function PortholeView({ time, isFriday, say }) {
   const sky = SKY[time]
   const [visitor, setVisitor] = useState(null)
   const [now, setNow] = useState(0)
@@ -253,7 +255,7 @@ export function PortholeView({ time, isFriday, say, onFindMew }) {
   // While a visitor is here, redraw every frame so it moves.
   useEffect(() => {
     if (!visitor) return
-    if (visitor.shiny) say(shinyTalk(visitor.type))
+    if (visitor.shiny) say(shinyTalk(visitor.type), VISITORS[visitor.type].id)
     let frame
     const tick = () => {
       setNow(performance.now())
@@ -285,14 +287,13 @@ export function PortholeView({ time, isFriday, say, onFindMew }) {
       say(['RED used STRENGTH!', "...The TRUCK won't budge."])
     } else {
       truckTries.current = 0
-      say(['...!?', 'Something pink darted out from under the TRUCK!'])
-      onFindMew() // straight away, so nothing that happens to the message can lose it
+      say(['...!?', 'Something pink darted out from under the TRUCK!'], 151) // it's Mew
     }
-  }, [say, onFindMew])
+  }, [say])
 
   function clickVisitor(e) {
     e.stopPropagation()
-    say(visitor.shiny ? shinyTalk(visitor.type) : TALK[visitor.type])
+    say(visitor.shiny ? shinyTalk(visitor.type) : TALK[visitor.type], VISITORS[visitor.type].id)
   }
 
   const t = visitor ? Math.max(0, now - visitor.start) : 0
@@ -336,7 +337,7 @@ export function PortholeView({ time, isFriday, say, onFindMew }) {
           )}
 
           {/* the truck's click area sits on top, so a Pokémon passing in front can't block it */}
-          <rect x={255} y={30} width={17} height={12} fill="transparent" className="clickable" onClick={clickTruck} />
+          <rect x={255} y={30} width={17} height={12} fill="transparent" className="clickable" onClick={clickTruck} data-through-dialogue="truck" />
         </g>
 
         {/* glare on the glass */}

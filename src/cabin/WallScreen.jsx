@@ -208,13 +208,46 @@ function GlitchBars({ seed }) {
 // The link button, on the lit side of the cabin so it can light up.
 // `link` is 'off', 'linking' or 'on'. While linking it blinks; once linked
 // its symbol glows green.
-function LinkButton({ link, onPress }) {
+const LINK_RED = '#b8413a'
+
+// How light a colour looks (WCAG relative luminance, 0 = black, 1 = white).
+function luminance(hex) {
+  const [r, g, b] = [1, 3, 5].map(i => {
+    const c = parseInt(hex.slice(i, i + 2), 16) / 255
+    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4
+  })
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b
+}
+// The type colour, lifted towards white only if it would vanish on the red button
+// (fighting and fire are close to it), so the symbol always stays readable.
+function onRed(hex) {
+  const contrast = (luminance(hex) + 0.05) / (luminance(LINK_RED) + 0.05)
+  if (contrast >= 1.5 || contrast <= 1 / 1.5) return hex
+  const mix = [1, 3, 5].map(i => Math.round(parseInt(hex.slice(i, i + 2), 16) * 0.45 + 255 * 0.55))
+  return '#' + mix.map(c => c.toString(16).padStart(2, '0')).join('')
+}
+
+// Just the signal symbol, for the flash drawn over it.
+const LINK_SYMBOL = LINK_BUTTON.map(row => row.replace(/[^W]/g, '.'))
+const READY_GREEN = '#2dcb27' // the Pokédex's green light
+
+function LinkButton({ link, onPress, types = [], pulse }) {
   const [x, y] = LINK_AT
-  const symbol = { off: C.monL, linking: '#fff070', on: '#58d868' }[link]
+  const [first, second] = types
+  // Linked, the symbol shows the Pokémon's second type colour, or the casing's
+  // white (the Poké Ball's bottom half) for one-type Pokémon. Its flashes swap
+  // that round: the first type's colour, or the Pokédex's green light.
+  const linked = second ? onRed(TYPE_COLORS[second]) : C.mon
+  const flash = second ? onRed(TYPE_COLORS[first]) : READY_GREEN
+  const symbol = { off: C.monL, linking: '#fff070', on: linked }[link]
   return (
     <g className={'clickable' + (link === 'linking' ? ' link-blink' : '')} onClick={onPress}>
       <rect x={x - 6} y={y - 6} width={13} height={13} fill="transparent" />
-      <Pixels rows={LINK_BUTTON} palette={{ K: C.ink, R: '#b8413a', W: symbol }} x={x - 4} y={y - 4} />
+      <Pixels rows={LINK_BUTTON} palette={{ K: C.ink, R: LINK_RED, W: symbol }} x={x - 4} y={y - 4} />
+      {/* now and then while linked: a quick flash, once or twice (see link.js) */}
+      {link === 'on' && pulse && (
+        <Pixels key={pulse.id} rows={LINK_SYMBOL} palette={{ W: flash }} x={x - 4} y={y - 4} className={'pulse pulse-' + pulse.count} />
+      )}
     </g>
   )
 }
@@ -257,7 +290,7 @@ function ShinyButton({ shiny, onPress }) {
   )
 }
 
-export default function WallScreen({ pokemon, loading, error, link, onLink, shiny, onShiny }) {
+export default function WallScreen({ pokemon, loading, error, link, onLink, pulse, shiny, onShiny }) {
   // (while developing, ?intro shows the intro straight away)
   const idle = useIdle(45 * 1000) || (import.meta.env.DEV && location.search.includes('intro'))
 
@@ -303,7 +336,9 @@ export default function WallScreen({ pokemon, loading, error, link, onLink, shin
         {link === 'on' && <rect x={PIC.x} y={PIC.y} width={PIC.w} height={PIC.h} fill="#ffffff" className="power-on" pointerEvents="none" />}
       </g>
       {badges}
-      <LinkButton link={link} onPress={onLink} />
+      {/* while off, clicking anywhere on the screen links it too */}
+      {link === 'off' && <path d={PICTURE} fill="transparent" className="clickable" onClick={onLink} />}
+      <LinkButton link={link} onPress={onLink} types={pokemon?.types} pulse={pulse} />
       <ShinyButton shiny={shiny} onPress={onShiny} />
       <clipPath id="screen-picture">
         <path d={PICTURE} />

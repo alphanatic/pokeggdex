@@ -272,32 +272,25 @@ const LIGHT = {
 
 let greeted = false
 
-export default function Cabin({ pokemon, loading, error, onSelect }) {
+export default function Cabin({ pokemon, loading, error, link, onLink, pulse, onPokemonDialogue, shiny, onShiny }) {
   const { time, isFriday } = useClock()
   const [message, setMessage] = useState(null) // { id, pages } while the text box is up
   const light = LIGHT[time]
 
   // Every message gets a new id, so the text box starts over even for the same words.
-  const say = useCallback(pages => setMessage(m => ({ id: (m?.id ?? 0) + 1, pages })), [])
-  const findMew = useCallback(() => onSelect(151), [onSelect])
+  // A message about a Pokémon also names it (its Pokédex number): that's a
+  // Pokémon dialogue, and starting one fires the Pokédex trigger pulse (App.jsx).
+  const say = useCallback((pages, pokemonId) => {
+    setMessage(m => ({ id: (m?.id ?? 0) + 1, pages }))
+    if (pokemonId !== undefined) onPokemonDialogue(pokemonId)
+  }, [onPokemonDialogue])
 
-  // The wall screen starts off. The link button connects it to the Pokédex:
-  // it searches for a moment, then shows what the Pokédex shows. Pressing it
-  // again switches the screen off.
-  const [link, setLink] = useState('off') // 'off' | 'linking' | 'on'
-  const [shiny, setShiny] = useState(false) // the screen's shiny button
-  function pressLink() {
-    if (link === 'off') {
-      setLink('linking')
-      setTimeout(() => setLink('on'), 2200)
-    } else if (link === 'on') {
-      setLink('off')
-    }
-  }
+  // The wall screen's link to the Pokédex (`link`, `onLink`, `pulse`) lives in
+  // link.js, so the Pokédex can flash along with it.
 
   // Easter egg: MissingNo. (No.000) does what it did in Red and Blue.
   useEffect(() => {
-    if (pokemon?.id === 0) say(['!?', 'The 6th item in your BAG multiplied!', '...Better not save the game now.'])
+    if (pokemon?.id === 0) say(['!?', 'The 6th item in your BAG multiplied!', '...Better not save the game now.'], 0)
   }, [pokemon, say])
 
   // A hello for anyone who opens the browser's developer tools.
@@ -332,8 +325,8 @@ export default function Cabin({ pokemon, loading, error, onSelect }) {
 
         {/* things that make their own light, or show the light outside */}
         <ScreenGlow pokemon={pokemon} strength={light.glow} link={link} />
-        <WallScreen pokemon={pokemon} loading={loading} error={error} link={link} onLink={pressLink} shiny={shiny} onShiny={() => setShiny(s => !s)} />
-        <PortholeView time={time} isFriday={isFriday} say={say} onFindMew={findMew} />
+        <WallScreen pokemon={pokemon} loading={loading} error={error} link={link} onLink={onLink} pulse={pulse} shiny={shiny} onShiny={onShiny} />
+        <PortholeView time={time} isFriday={isFriday} say={say} />
         <Lamp lit={time !== 'day'} />
       </svg>
 

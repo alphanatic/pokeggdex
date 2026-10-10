@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { getPokemon, getPokemonList } from './api.js'
 import { filterPokemon, formatNumber } from './utils.js'
 import Cabin, { useDexPlacement } from './cabin/Cabin.jsx'
+import { useLink } from './cabin/link.js'
 import { MISSINGNO } from './missingno.js'
 import MainScreen from './components/MainScreen.jsx'
 import InfoScreen from './components/InfoScreen.jsx'
@@ -19,13 +20,24 @@ export default function App() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [mode, setMode] = useState('entry')
-  const [shiny, setShiny] = useState(false)
+  const [shiny, setShiny] = useState(false)      // shiny colours, on the Pokédex and the wall screen alike
   const [entry, setEntry] = useState('')          // digits typed on the keypad
   const [message, setMessage] = useState('No.___')  // keypad feedback, e.g. "Found #025"
   const [search, setSearch] = useState('')         // text in the search box
   const [playingCry, setPlayingCry] = useState(false)
   const [closed, setClosed] = useState(false)      // is the lid folded shut?
   const placement = useDexPlacement()              // where it sits in the cabin
+  const { link, pressLink, pulse } = useLink()     // its link to the cabin's wall screen
+  // The Pokédex trigger pulse: when a dialogue about a
+  // Pokémon starts in the cabin (clicking a visitor in the porthole, Mew under the
+  // truck, MissingNo.), the Pokédex turns to that Pokémon and its sensor lights up:
+  // to 75%, held 0.2 s, then fading out (index.css). After that the dialogue has
+  // nothing to do with it. `dexTriggerPulse` counts the pulses, to restart the glow.
+  const [dexTriggerPulse, setDexTriggerPulse] = useState(0)
+  const startPokemonDialogue = useCallback(id => {
+    setSelectedId(id)
+    setDexTriggerPulse(n => n + 1)
+  }, [])
 
   // Load the list once, when the app starts.
   useEffect(() => {
@@ -160,7 +172,7 @@ export default function App() {
   return (
     <>
       {/* The S.S. Anne cabin; its wall screen shows what the Pokédex shows */}
-      <Cabin pokemon={pokemon} loading={loading} error={error} onSelect={setSelectedId} />
+      <Cabin pokemon={pokemon} loading={loading} error={error} link={link} onLink={pressLink} pulse={pulse} onPokemonDialogue={startPokemonDialogue} shiny={shiny} onShiny={() => setShiny(s => !s)} />
       <WearDefs />
 
       <div className="dex-stage" style={placement ?? undefined}>
@@ -172,15 +184,32 @@ export default function App() {
 
             {/* On the raised head */}
             <div className="head-parts">
-              <span className={'lens' + (loading ? ' scanning' : '')} title="Scans while asking the API" />
-              <span className={'led led-red' + (error ? ' on' : '')} title="Error" />
-              <span className={'led led-yellow' + (loading ? ' on blinking' : '')} title="Loading" />
-              <span className={'led led-green' + (!loading && !error ? ' on' : '')} title="Ready" />
+              {/* scans while asking the API; lights up with each Pokédex trigger pulse
+                  (the key restarts its glow every time) */}
+              <span
+                key={'lens-' + dexTriggerPulse}
+                className={'lens' + (loading ? ' scanning' : '') + (dexTriggerPulse ? ' dex-trigger-pulse' : '')}
+                title="Scans while asking the API"
+              />
+              {/* The three lights don't react to using the Pokédex (browsing, loading,
+                  errors): green stays on, red and yellow stay off. Only the link to the
+                  cabin's wall screen moves them: with each of its flashes, 0.2 s later,
+                  green dims and yellow glows faintly (see link.js and index.css). */}
+              <span className="led led-red" />
+              <span
+                key={pulse ? 'yellow-pulse-' + pulse.id : 'yellow'}
+                className={'led led-yellow' + (pulse ? ' link-pulse-' + pulse.count : '')}
+              />
+              <span
+                key={pulse ? 'green-pulse-' + pulse.id : 'green'}
+                className={'led led-green on' + (pulse ? ' link-pulse-' + pulse.count : '')}
+              />
             </div>
 
             <MainScreen pokemon={pokemon} shiny={shiny} loading={loading} error={error} />
 
             <button className="round-button" onClick={playCry} title="Play cry" />
+            {/* normal / shiny colours, for the Pokédex and the cabin's wall screen together */}
             <button className={'pill pill-red' + (!shiny ? ' pressed' : '')} onClick={() => setShiny(false)} title="Normal colours" />
             <button className={'pill pill-blue' + (shiny ? ' pressed' : '')} onClick={() => setShiny(true)} title="Shiny colours" />
             <DPad
