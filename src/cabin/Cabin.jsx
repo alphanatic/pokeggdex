@@ -21,6 +21,7 @@ const TABLE_Y = 156 // the table top, where the Pokédex stands
 // Where the Pokédex stands on the table: its middle, and how wide it is there.
 const DEX_SPOT = { x: 250, width: 104 }
 const DEX = { w: 764.4, h: 568 } // the open Pokédex (.dex-stage), in CSS px
+const DEX_SIZE = 1.05 // 5% larger than the base size below
 
 // Places the Pokédex on the table, for the current window size.
 export function useDexPlacement() {
@@ -31,7 +32,7 @@ export function useDexPlacement() {
       const H = window.innerHeight
       const k = Math.max(W / SCENE.w, H / SCENE.h) // scene pixels -> screen pixels
       // its size follows the cabin, but never so small it's hard to use, nor bigger than the window
-      let s = Math.max((DEX_SPOT.width / DEX.w) * k, Math.min(0.6, (W * 0.42) / DEX.w))
+      let s = Math.max((DEX_SPOT.width / DEX.w) * k, Math.min(0.6, (W * 0.42) / DEX.w)) * DEX_SIZE
       s = Math.min(s, (W - 32) / DEX.w, (H - 32) / (DEX.h + 24))
       const x = (W - SCENE.w * k) / 2 + DEX_SPOT.x * k
       const y = TABLE_Y * k - ((DEX.h + 20) * s) / 2 // stood on the table top

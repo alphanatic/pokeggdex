@@ -28,13 +28,20 @@ export default function App() {
   const [closed, setClosed] = useState(false)      // is the lid folded shut?
   const placement = useDexPlacement()              // where it sits in the cabin
   const { link, pressLink, pulse } = useLink()     // its link to the cabin's wall screen
+  // The link button: switching the wall screen off also folds the Pokédex shut.
+  function pressLinkButton() {
+    if (link === 'on') setClosed(true)
+    pressLink()
+  }
   // The Pokédex trigger pulse: when a dialogue about a
   // Pokémon starts in the cabin (clicking a visitor in the porthole, Mew under the
   // truck, MissingNo.), the Pokédex turns to that Pokémon and its sensor lights up:
   // to 75%, held 0.2 s, then fading out (index.css). After that the dialogue has
-  // nothing to do with it. `dexTriggerPulse` counts the pulses, to restart the glow.
+  // nothing to do with it. If the Pokédex is folded shut, it opens first.
+  // `dexTriggerPulse` counts the pulses, to restart the glow.
   const [dexTriggerPulse, setDexTriggerPulse] = useState(0)
   const startPokemonDialogue = useCallback(id => {
+    setClosed(false) // folded shut? it opens, as if you'd clicked the hinge
     setSelectedId(id)
     setDexTriggerPulse(n => n + 1)
   }, [])
@@ -172,7 +179,7 @@ export default function App() {
   return (
     <>
       {/* The S.S. Anne cabin; its wall screen shows what the Pokédex shows */}
-      <Cabin pokemon={pokemon} loading={loading} error={error} link={link} onLink={pressLink} pulse={pulse} onPokemonDialogue={startPokemonDialogue} shiny={shiny} onShiny={() => setShiny(s => !s)} />
+      <Cabin pokemon={pokemon} loading={loading} error={error} link={link} onLink={pressLinkButton} pulse={pulse} onPokemonDialogue={startPokemonDialogue} shiny={shiny} onShiny={() => setShiny(s => !s)} />
       <WearDefs />
 
       <div className="dex-stage" style={placement ?? undefined}>
