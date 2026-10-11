@@ -55,7 +55,9 @@ body {
 }
 
 main {
-  width: 60vw;               /* the page takes up to 60% of the window's width */
+  /* Fills the window, keeping a 20px gap at each side, until it reaches its
+     widest; on bigger windows it stays that wide, centred. */
+  max-width: 1000px;
   margin: 0 auto;
   padding: 40px 20px 80px;
 }
@@ -225,13 +227,12 @@ tr:last-child td { border-bottom: none; }
 
 .footnote { margin-top: 40px; font-size: 16px; color: var(--wood-d); }
 
-/* on narrow screens 60% would be cramped, so the page uses the full width */
-@media (max-width: 800px) {
-  main { width: 100%; }
-}
 @media (max-width: 560px) {
   body { font-size: 16px; }
   main { padding: 28px 14px 60px; }
   .title { padding: 18px 10px 14px; gap: 6px; }
   .board { padding: 24px 18px 30px; border-radius: 16px; }
+  /* smaller Exeggcute, so the one-line title still fits on a phone */
+  .title-mon { width: 32px; height: 32px; margin: -4px 0; }
+  .title-name { font-size: clamp(9px, calc((100cqw - 116px) / 13.5), 46px); }
 }
