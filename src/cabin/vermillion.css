@@ -40,7 +40,7 @@ body:has(.cabin) { background: #120c10; }
 /* While linked: now and then the link button's symbol flashes (the first type's
    colour, or the Pokédex's green for one-type Pokémon; see WallScreen.jsx), once or
    twice, quick and faint-feeling (link.js decides when). The Pokédex's ready
-   light repeats it 0.2 s later (see .link-pulse-* in index.css). */
+   light repeats it 0.2 s later (see .link-pulse-* in pokedex.css). */
 .pulse { opacity: 0; }
 .pulse-1 { animation: pulse-once 0.16s steps(1, end); }
 .pulse-2 { animation: pulse-twice 0.44s steps(1, end); }
@@ -121,8 +121,9 @@ body:has(.cabin) { background: #120c10; }
   25% { opacity: 0; }
 }
 
-/* While a message is up, this covers everything (the Pokédex too), so a
-   click anywhere goes to the text box (see TextBox.jsx). */
+/* While a message is up, this covers the whole cabin, so a click anywhere
+   goes to the text box (see TextBox.jsx). The Pokédex sits above it
+   (z-index 10, pokedex.css) and keeps working; the text box is on top (11). */
 .textbox-catcher {
   position: fixed;
   inset: 0;
@@ -135,7 +136,7 @@ body:has(.cabin) { background: #120c10; }
   position: fixed;
   left: max(12px, 2vw);
   bottom: max(12px, 3vh);
-  z-index: 10;
+  z-index: 11;
   width: min(600px, 46vw);
   min-height: 6.2em;
   padding: 1.3em 1.6em;
@@ -171,7 +172,7 @@ body:has(.cabin) { background: #120c10; }
   .lamp-frame:first-of-type { opacity: 1; }
 }
 
-/* Phones: the Pokédex stacks its halves (see index.css), and the cabin
+/* Phones: the Pokédex stacks its halves (see pokedex.css), and the cabin
    becomes a 16:9 picture above it instead of filling the window. */
 @media (max-width: 799px) {
   .cabin {

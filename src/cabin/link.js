@@ -8,7 +8,7 @@ import { createWirelessPulse } from './wirelessPulse.js'
 //
 // While they're linked, every 3 to 4.5 seconds the link button flashes 1, 2
 // or 3 times (how many: wireless pulse logic, see wirelessPulse.js), and the Pokédex answers 0.2 seconds later with the same
-// rhythm (the delay lives in index.css): its green light dims (or lights up if
+// rhythm (the delay lives in pokedex.css): its green light dims (or lights up if
 // it was off) and its yellow light glows faintly, like two devices keeping in
 // touch. `pulse` changes every time: { id, count }.
 export function useLink() {

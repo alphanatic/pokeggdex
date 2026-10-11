@@ -3,9 +3,9 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.jsx'
 // CSS order matters: later files win. FantaCSS gives the base look,
-// then index.css adds our own touches on top.
+// then the Pokédex's own styles go on top (each scene imports its own CSS).
 import './fanta.css'
-import './index.css'
+import './pokedex/pokedex.css'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

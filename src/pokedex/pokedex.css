@@ -1,4 +1,5 @@
-/* Our Pokédex styles, loaded after fanta.css so these win where both apply. */
+/* The Pokédex's styles (the device, its spot in a scene, its slide-in), plus
+   the page basics it needs. Loaded after fanta.css so these win where both apply. */
 
 /* Pixel fonts from Google Fonts: Press Start 2P (Game Boy style) and VT323 (old LCD). */
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
@@ -35,6 +36,9 @@ body {
   width: 764.4px;
   height: 568px;
   transform: translate(-50%, -50%) scale(var(--dex-scale, 0.8));
+  /* Above a scene's window-wide layers (z-index 9 and below), like the cabin's
+     dialogue layer: the Pokédex stays usable while someone is talking. */
+  z-index: 10;
 }
 
 /* Called into a scene, it slides in from the side of the screen nearest its
@@ -882,7 +886,7 @@ body {
   /* the scene as a picture on top, the Pokédex below it (no slide-in here) */
   #root { display: flex; flex-direction: column; align-items: center; }
   .dex-stage {
-    position: static;
+    position: relative; /* not static, so z-index still lifts it above the dialogue layer */
     width: auto;
     height: auto;
     transform: none;

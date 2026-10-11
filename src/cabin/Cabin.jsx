@@ -299,7 +299,7 @@ export default function Cabin() {
   // The Pokédex trigger pulse: when a dialogue about a Pokémon starts here
   // (clicking a visitor in the porthole, Mew under the truck, MissingNo.), the
   // Pokédex turns to that Pokémon and its sensor lights up: to 75%, held 0.2 s,
-  // then fading out (index.css). After that the dialogue has nothing to do with
+  // then fading out (pokedex.css). After that the dialogue has nothing to do with
   // it. If the Pokédex is folded shut, it opens first. `dexTriggerPulse` counts
   // the pulses, to restart the glow.
   const [dexTriggerPulse, setDexTriggerPulse] = useState(0)

@@ -58,6 +58,17 @@ main {
   width: 60vw;               /* the page takes up to 60% of the window's width */
   margin: 0 auto;
   padding: 40px 20px 80px;
+}
+
+/* The board everything is read from: a panel inside main, as tall as its
+   contents need (no max height). Its corners are rounded off evenly, like
+   a board that's been worn down over the years. */
+.board {
+  padding: 44px 52px 52px;
+  background: var(--paper);
+  border: 4px solid var(--ink);
+  border-radius: 22px;
+  box-shadow: inset 0 0 0 4px var(--cream), 0 6px 0 var(--cream-dd);
   container-type: inline-size; /* lets the title size its text to this width (cqw) */
 }
 
@@ -222,4 +233,5 @@ tr:last-child td { border-bottom: none; }
   body { font-size: 16px; }
   main { padding: 28px 14px 60px; }
   .title { padding: 18px 10px 14px; gap: 6px; }
+  .board { padding: 24px 18px 30px; border-radius: 16px; }
 }

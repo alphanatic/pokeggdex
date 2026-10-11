@@ -163,7 +163,7 @@ export default function Pokedex({ dex, placement, pulse = null, triggerPulse = 0
               {/* The three lights don't react to using the Pokédex (browsing, loading,
                   errors): green stays on, red and yellow stay off. Only the scene's
                   pulses move them: with each, 0.2 s later, green dims and yellow
-                  glows faintly (see index.css). */}
+                  glows faintly (see pokedex.css). */}
               <span className="led led-red" />
               <span
                 key={pulse ? 'yellow-pulse-' + pulse.id : 'yellow'}
