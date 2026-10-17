@@ -1,4 +1,4 @@
-// The Pokédex's real shape, measured from the reference render.
+// The pokeggdex's real shape, measured from the reference render.
 // How it was measured: see design/shape-study/README.md.
 // Units: px, scaled so the base is 568 tall (1 mm = 3.783 px).
 

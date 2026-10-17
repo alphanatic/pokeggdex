@@ -38,13 +38,13 @@ function cleanText(text) {
 // The first 151 Pokémon: just names, for the list mode.
 export async function getPokemonList() {
   const data = await getJSON(`${BASE_URL}/pokemon?limit=151`)
-  // The API gives [{ name, url }, ...]; we add the Pokédex number ourselves.
+  // The API gives [{ name, url }, ...]; we add the pokeggdex number ourselves.
   return data.results.map((pokemon, index) => ({ id: index + 1, name: pokemon.name }))
 }
 
 // One Pokémon in detail. The data is split over two API addresses:
 //   /pokemon/7          -> body: sprites, types, stats, moves, cry
-//   /pokemon-species/7  -> "book" info: category and Pokédex entry text
+//   /pokemon-species/7  -> "book" info: category and pokeggdex entry text
 export async function getPokemon(id) {
   // Promise.all sends both requests at the same time and waits for both answers.
   const [data, species] = await Promise.all([

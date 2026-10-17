@@ -1,6 +1,6 @@
-# Shape study: Pokédex from the reference render
+# Shape study: pokeggdex from the reference render
 
-Measured from a 3D render of the anime Pokédex, in a separate modelling project that holds the full
+Measured from a 3D render of the anime pokeggdex, in a separate modelling project that holds the full
 measurements and a 3D model. The numbers this app uses are in `src/shape.js` and the table below.
 
 The lid's outline is fitted to close flush around the raised head. In the render itself it falls 3–8 mm short.

@@ -6,7 +6,7 @@
 //   - height 10'00" (3.0 m), weight 3507.2 lb (1590.8 kg)
 //   - base stats HP 33, Attack 136, Defense 0, Speed 29, Special 6
 //   - moves: Water Gun, Water Gun, Sky Attack
-//   - its Pokédex text in the Japanese games: "コメント さくせいちゅう",
+//   - its pokeggdex text in the Japanese games: "コメント さくせいちゅう",
 //     "comment being written": nobody ever wrote one.
 //   - meeting it adds 128 to the 6th item in your bag.
 import { cellsToPath } from './cabin/pixels.jsx'
@@ -40,7 +40,7 @@ export function missingnoPaths(x = 0, y = 0) {
   }))
 }
 
-// The same sprite as an image file (a data URL), for the Pokédex's own screens.
+// The same sprite as an image file (a data URL), for the pokeggdex's own screens.
 // Those show 96 x 96 sprites with empty space around the Pokémon, so it gets the same margin.
 const svg =
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-20 -20 96 96" shape-rendering="crispEdges">` +

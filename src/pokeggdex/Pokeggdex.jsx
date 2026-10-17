@@ -6,10 +6,10 @@ import DPad from '../components/DPad.jsx'
 import Keypad from '../components/Keypad.jsx'
 import { BaseBody, HingeBody, LidBody, LidBack, WearDefs } from '../components/Shell.jsx'
 
-// The Pokédex: the device on its own. It knows nothing about the scene it's in.
+// The pokeggdex: the device on its own. It knows nothing about the scene it's in.
 // A scene calls it into view:
-//   const dex = usePokedex()          // its state, which the scene can also drive
-//   <Pokedex dex={dex} placement={...} pulse={...} triggerPulse={...} />
+//   const dex = usePokeggdex()          // its state, which the scene can also drive
+//   <Pokeggdex dex={dex} placement={...} pulse={...} triggerPulse={...} />
 //   - placement:    where it stands: { '--dex-x', '--dex-y', '--dex-scale' }
 //   - pulse:        { id, count } flashes the three lights on top echo (or null)
 //   - triggerPulse: a count; each time it goes up, the sensor lights up once
@@ -18,7 +18,7 @@ import { BaseBody, HingeBody, LidBody, LidBack, WearDefs } from '../components/S
 
 const TOTAL = 151
 const MODES = ['entry', 'stats', 'moves', 'sprites', 'list'] // what the right screen can show
-const DEX_WIDTH = 764.4 // the open Pokédex, in CSS px before scaling
+const DEX_WIDTH = 764.4 // the open pokeggdex, in CSS px before scaling
 
 // How far to the side it starts: past whichever screen edge is closer to its spot.
 function entranceOffset(placement) {
@@ -27,7 +27,7 @@ function entranceOffset(placement) {
   return x < window.innerWidth / 2 ? -(x + halfWidth) : window.innerWidth - x + halfWidth
 }
 
-export default function Pokedex({ dex, placement, pulse = null, triggerPulse = 0 }) {
+export default function Pokeggdex({ dex, placement, pulse = null, triggerPulse = 0 }) {
   const { list, selectedId, select, pokemon, loading, error, shiny, setShiny, closed, setClosed } = dex
   const [mode, setMode] = useState('entry')
   const [entry, setEntry] = useState('')            // digits typed on the keypad
@@ -37,7 +37,7 @@ export default function Pokedex({ dex, placement, pulse = null, triggerPulse = 0
   // worked out once, when it first appears, so resizing the window doesn't replay it
   const [enterFrom] = useState(() => entranceOffset(placement))
 
-  // Move forwards/backwards through the Pokédex, wrapping around at the ends.
+  // Move forwards/backwards through the pokeggdex, wrapping around at the ends.
   function step(amount) {
     select(id => {
       if (id === 0) return amount > 0 ? 1 : TOTAL // from MissingNo. back into the real list
@@ -145,7 +145,7 @@ export default function Pokedex({ dex, placement, pulse = null, triggerPulse = 0
       <WearDefs />
 
       <div className="dex-stage entering" style={{ ...placement, '--enter-dx': `${enterFrom}px` }}>
-        <main className={'pokedex' + (closed ? ' closed' : '')}>
+        <main className={'pokeggdex' + (closed ? ' closed' : '')}>
           {/* ---------- Left half ----------
               Every part sits where it is on the measured device (see shape.js). */}
           <section className="half-left">
@@ -160,10 +160,10 @@ export default function Pokedex({ dex, placement, pulse = null, triggerPulse = 0
                 className={'lens' + (loading ? ' scanning' : '') + (triggerPulse ? ' dex-trigger-pulse' : '')}
                 title="Scans while asking the API"
               />
-              {/* The three lights don't react to using the Pokédex (browsing, loading,
+              {/* The three lights don't react to using the pokeggdex (browsing, loading,
                   errors): green stays on, red and yellow stay off. Only the scene's
                   pulses move them: with each, 0.2 s later, green dims and yellow
-                  glows faintly (see pokedex.css). */}
+                  glows faintly (see pokeggdex.css). */}
               <span className="led led-red" />
               <span
                 key={pulse ? 'yellow-pulse-' + pulse.id : 'yellow'}
@@ -188,15 +188,15 @@ export default function Pokedex({ dex, placement, pulse = null, triggerPulse = 0
               onRight={() => step(1)}
             />
             <div className="recessed-panel base-panel" />
-            <span className="brand">POKéDEX</span>
+            <span className="brand">pokeggdex</span>
           </section>
 
           {/* Click the hinge to fold the lid shut (or open it again) */}
           <button
             className="hinge"
             onClick={() => setClosed(c => !c)}
-            title={closed ? 'Open the Pokédex' : 'Fold the Pokédex shut'}
-            aria-label={closed ? 'Open the Pokédex' : 'Fold the Pokédex shut'}
+            title={closed ? 'Open the pokeggdex' : 'Fold the pokeggdex shut'}
+            aria-label={closed ? 'Open the pokeggdex' : 'Fold the pokeggdex shut'}
           >
             <HingeBody />
           </button>
@@ -247,7 +247,7 @@ export default function Pokedex({ dex, placement, pulse = null, triggerPulse = 0
               </div>
             </section>
 
-            <div className="lid-face lid-outside" onClick={() => setClosed(false)} title="Open the Pokédex">
+            <div className="lid-face lid-outside" onClick={() => setClosed(false)} title="Open the pokeggdex">
               <LidBack />
             </div>
           </div>

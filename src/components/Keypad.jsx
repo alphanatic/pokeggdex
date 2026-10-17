@@ -1,6 +1,6 @@
 // The 2 x 6 grid of blue keys: five number keys and one wide key per row.
 // In the anime they're never explained; we use them as a number pad for
-// typing a Pokédex number. The wide keys delete a digit and confirm.
+// typing a pokeggdex number. The wide keys delete a digit and confirm.
 // The letters are printed on the keys like on an old phone (decoration only).
 const KEYS = [
   ['1', ''], ['2', 'ABC'], ['3', 'DEF'], ['4', 'GHI'], ['5', 'JKL'], ['DEL', ''],

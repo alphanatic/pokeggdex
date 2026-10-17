@@ -1,4 +1,4 @@
-/* The S.S. Anne cabin around the Pokédex (see Cabin.jsx).
+/* The S.S. Anne cabin around the pokeggdex (see Cabin.jsx).
    All movement here steps from frame to frame instead of gliding,
    the way a Game Boy animates. */
 
@@ -6,7 +6,7 @@
    (:has() makes it apply only while this scene is on the page.) */
 body:has(.cabin) { background: #120c10; }
 
-/* The cabin fills the window, behind the Pokédex. */
+/* The cabin fills the window, behind the pokeggdex. */
 .cabin {
   position: fixed;
   inset: 0;
@@ -34,13 +34,13 @@ body:has(.cabin) { background: #120c10; }
   fill: #57301a;
 }
 
-/* The link button blinks while it connects the screen to the Pokédex */
+/* The link button blinks while it connects the screen to the pokeggdex */
 .link-blink { animation: blink 0.3s steps(1, end) infinite; }
 
 /* While linked: now and then the link button's symbol flashes (the first type's
-   colour, or the Pokédex's green for one-type Pokémon; see WallScreen.jsx), once or
-   twice, quick and faint-feeling (link.js decides when). The Pokédex's ready
-   light repeats it 0.2 s later (see .link-pulse-* in pokedex.css). */
+   colour, or the pokeggdex's green for one-type Pokémon; see WallScreen.jsx), once or
+   twice, quick and faint-feeling (link.js decides when). The pokeggdex's ready
+   light repeats it 0.2 s later (see .link-pulse-* in pokeggdex.css). */
 .pulse { opacity: 0; }
 .pulse-1 { animation: pulse-once 0.16s steps(1, end); }
 .pulse-2 { animation: pulse-twice 0.44s steps(1, end); }
@@ -122,8 +122,8 @@ body:has(.cabin) { background: #120c10; }
 }
 
 /* While a message is up, this covers the whole cabin, so a click anywhere
-   goes to the text box (see TextBox.jsx). The Pokédex sits above it
-   (z-index 10, pokedex.css) and keeps working; the text box is on top (11). */
+   goes to the text box (see TextBox.jsx). The pokeggdex sits above it
+   (z-index 10, pokeggdex.css) and keeps working; the text box is on top (11). */
 .textbox-catcher {
   position: fixed;
   inset: 0;
@@ -172,7 +172,7 @@ body:has(.cabin) { background: #120c10; }
   .lamp-frame:first-of-type { opacity: 1; }
 }
 
-/* Phones: the Pokédex stacks its halves (see pokedex.css), and the cabin
+/* Phones: the pokeggdex stacks its halves (see pokeggdex.css), and the cabin
    becomes a 16:9 picture above it instead of filling the window. */
 @media (max-width: 799px) {
   .cabin {

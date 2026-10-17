@@ -46,13 +46,13 @@ export default function TextBox({ pages, onDone }) {
   }
 
   // Drawn straight into <body>: the click layer above the cabin (but under the
-  // Pokédex, which keeps working), and the box itself above everything.
+  // pokeggdex, which keeps working), and the box itself above everything.
   return createPortal(
     <>
       {/* Like in the games, while someone is talking a click anywhere goes to
           the text box: this invisible layer covers the whole cabin until the
           last page closes, so nothing in the room gets clicked by accident.
-          The Pokédex is the one exception: it sits above this layer. */}
+          The pokeggdex is the one exception: it sits above this layer. */}
       <div className="textbox-catcher" onClick={catchClick} aria-hidden="true" />
       <div className="textbox" role="status" aria-live="polite" onClick={next}>
         <p>{text.slice(0, shown)}</p>

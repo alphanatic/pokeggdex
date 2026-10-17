@@ -1,10 +1,10 @@
 # Pokéggs: the easter eggs aboard the S.S. Anne
 
-**Spoilers ahead.** This lists every hidden thing in the cabin around the Pokédex, how to find it, and the piece of Pokémon history behind it.
+**Spoilers ahead.** This lists every hidden thing in the cabin around the pokeggdex, how to find it, and the piece of Pokémon history behind it.
 
 Each egg was tested in the running app on 10 Oct 2026. Screenshots are in [`screenshots/`](screenshots/).
 
-**First, switch on the wall screen:** it starts off. Press the small red button at the lower-left of the round screen and it links to the Pokédex after a moment. Eggs 2 and 7 show up on that screen.
+**First, switch on the wall screen:** it starts off. Press the small red button at the lower-left of the round screen and it links to the pokeggdex after a moment. Eggs 2 and 7 show up on that screen.
 
 ## Quick list
 
@@ -31,25 +31,25 @@ Each egg was tested in the running app on 10 Oct 2026. Screenshots are in [`scre
 
 1. "There's a TRUCK parked on the dock. / People say MEW is hiding under it..."
 2. "RED used STRENGTH! / ...The TRUCK won't budge."
-3. "...!? / Something pink darted out from under the TRUCK!" and the Pokédex jumps to **No.151, Mew**.
+3. "...!? / Something pink darted out from under the TRUCK!" and the pokeggdex jumps to **No.151, Mew**.
 
 **The lore:** in Pokémon Red and Blue, a lone truck sits on the dock next to the S.S. Anne. You can only reach it in a narrow window of the game. That was enough for a schoolyard rumour: push the truck with Strength and Mew is underneath. It was never true, but every kid in 1999 knew someone whose cousin had done it.
 
-**Tested:** all three messages appear in order, and the Pokédex ends on Mew, No.151. ![Mew found](screenshots/11-truck-egg-finds-mew.png)
+**Tested:** all three messages appear in order, and the pokeggdex ends on Mew, No.151. ![Mew found](screenshots/11-truck-egg-finds-mew.png)
 
 ---
 
 ## 2. MissingNo. at No.000
 
-**How to find it:** type `0 0 0` on the Pokédex keypad (or `0` and OK), or press the 0 key three times on your keyboard. You can also type `missingno` in the search box and press Enter.
+**How to find it:** type `0 0 0` on the pokeggdex keypad (or `0` and OK), or press the 0 key three times on your keyboard. You can also type `missingno` in the search box and press Enter.
 
 **What happens:**
 
 - The wall screen breaks into flickering glitch bars with MissingNo.'s famous "backwards L" sprite.
-- The Pokédex reads **MISSINGNO.**, category **???**, HT 3m, WT 1590.8kg, and the keypad panel shows `!? #000`.
+- The pokeggdex reads **MISSINGNO.**, category **???**, HT 3m, WT 1590.8kg, and the keypad panel shows `!? #000`.
 - The entry screen says **コメント さくせいちゅう** ("comment being written").
 - A text box: "!? / The 6th item in your BAG multiplied! / ...Better not save the game now."
-- Its stats and moves are the real ones (see below). Press ◀ or ▶ to get back to the normal Pokédex.
+- Its stats and moves are the real ones (see below). Press ◀ or ▶ to get back to the normal pokeggdex.
 
 **The lore:** MissingNo. ("Missing Number") is the most famous glitch in Pokémon. In Red and Blue you talked to the old man in Viridian City, flew to Cinnabar Island and surfed up and down its east coast. Everything here is as the games show it:
 
@@ -57,7 +57,7 @@ Each egg was tested in the running app on 10 Oct 2026. Screenshots are in [`scre
 - **Size:** 10'00" and 3507.2 lb (3.0 m, 1590.8 kg).
 - **Base stats:** HP 33, Attack 136, Defense 0, Speed 29, Special 6.
 - **Moves:** Water Gun, Water Gun, Sky Attack.
-- **Pokédex text:** nobody ever wrote one. The Japanese games literally say "comment being written".
+- **pokeggdex text:** nobody ever wrote one. The Japanese games literally say "comment being written".
 - **The item glitch:** meeting it adds 128 to the 6th item in your bag, the classic Rare Candy trick.
 - **The warning:** players were warned that saving afterwards could scramble the Hall of Fame.
 
@@ -168,7 +168,7 @@ Like walking up to a sign in the games, clicking parts of the cabin brings up a 
 
 **What happens:**
 
-> **POKéDEX**
+> **pokeggdex**
 > Welcome aboard the S.S. ANNE!
 > Psst... not every Pokémon is in the list. Try No.000.
 

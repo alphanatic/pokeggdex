@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react'
 import { getPokemon, getPokemonList } from '../api.js'
 import { MISSINGNO } from '../missingno.js'
 
-// The Pokédex's state that a scene can read and drive: which Pokémon it's on,
+// The pokeggdex's state that a scene can read and drive: which Pokémon it's on,
 // that Pokémon's details, shiny colours, and whether it's folded shut.
-// A scene calls usePokedex() and hands the result to <Pokedex dex={...} />,
+// A scene calls usePokeggdex() and hands the result to <Pokeggdex dex={...} />,
 // so both the scene (a wall screen, an easter egg...) and the device itself
-// work on the same Pokédex.
+// work on the same pokeggdex.
 //   startClosed: arrive folded shut, for the visitor to open (the scene decides)
-export function usePokedex({ startClosed = false } = {}) {
+export function usePokeggdex({ startClosed = false } = {}) {
   const [list, setList] = useState([])            // all 151 names, for the list mode
   const [selectedId, select] = useState(1)        // which Pokémon is shown
   const [pokemon, setPokemon] = useState(null)    // its details, once they arrive
@@ -17,7 +17,7 @@ export function usePokedex({ startClosed = false } = {}) {
   const [shiny, setShiny] = useState(false)       // shiny colours
   const [closed, setClosed] = useState(startClosed) // is the lid folded shut?
 
-  // Load the list once, when the Pokédex starts.
+  // Load the list once, when the pokeggdex starts.
   useEffect(() => {
     getPokemonList()
       .then(setList)

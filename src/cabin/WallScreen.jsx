@@ -7,7 +7,7 @@ import { energyIcon } from './energy.js'
 import { C } from './palette.js'
 
 // The cabin's wall screen: it shows whatever
-// the Pokédex shows, Game Boy style.
+// the pokeggdex shows, Game Boy style.
 // The screen is a Poké Ball: a round picture in a round casing, red on one
 // side and white on the other with a black band between. The ball is tilted
 // (and stays tilted) so its band runs along the same bottom-left -> top-right
@@ -85,8 +85,8 @@ const SHINY_BUTTON = [
   '.KKKKK.',
 ]
 
-// The link button: the Pokédex's red, with a signal symbol. Pressing it links
-// the screen to the Pokédex (see LinkButton below).
+// The link button: the pokeggdex's red, with a signal symbol. Pressing it links
+// the screen to the pokeggdex (see LinkButton below).
 const LINK_BUTTON = [
   '..KKKKK..',
   '.KRRRRRK.',
@@ -229,14 +229,14 @@ function onRed(hex) {
 
 // Just the signal symbol, for the flash drawn over it.
 const LINK_SYMBOL = LINK_BUTTON.map(row => row.replace(/[^W]/g, '.'))
-const READY_GREEN = '#2dcb27' // the Pokédex's green light
+const READY_GREEN = '#2dcb27' // the pokeggdex's green light
 
 function LinkButton({ link, onPress, types = [], pulse }) {
   const [x, y] = LINK_AT
   const [first, second] = types
   // Linked, the symbol shows the Pokémon's second type colour, or the casing's
   // white (the Poké Ball's bottom half) for one-type Pokémon. Its flashes swap
-  // that round: the first type's colour, or the Pokédex's green light.
+  // that round: the first type's colour, or the pokeggdex's green light.
   const linked = second ? onRed(TYPE_COLORS[second]) : C.mon
   const flash = second ? onRed(TYPE_COLORS[first]) : READY_GREEN
   const symbol = { off: C.monL, linking: '#fff070', on: linked }[link]

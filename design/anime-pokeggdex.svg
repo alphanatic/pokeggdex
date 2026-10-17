@@ -4,7 +4,7 @@
   <linearGradient id="hinge" x1="0" x2="1"><stop offset="0" stop-color="#8a0e10"/><stop offset="0.4" stop-color="#ff5a4f"/><stop offset="1" stop-color="#9e1316"/></linearGradient>
 </defs>
 <rect width="1300" height="900" fill="#fbfaf7"/>
-<text x="60" y="52" font-size="26" font-weight="700" fill="#222">Pokédex, season 1 anime: how I read the design</text>
+<text x="60" y="52" font-size="26" font-weight="700" fill="#222">pokeggdex, season 1 anime: how I read the design</text>
 <text x="60" y="80" font-size="15" fill="#666">Drawn flat from the front. Proportions are estimates from the episode stills.</text>
 <text x="60" y="108" font-size="13" font-weight="700" fill="#999" letter-spacing="2">OPEN</text>
 <text x="900" y="108" font-size="13" font-weight="700" fill="#999" letter-spacing="2">CLOSED</text>

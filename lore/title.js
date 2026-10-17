@@ -1,5 +1,5 @@
-// The title bar's two Exeggcute: Pokédex No.102's shiny sprite from Pokémon
-// Crystal, looked up from PokéAPI like the Pokédex looks up its Pokémon.
+// The title bar's two Exeggcute: pokeggdex No.102's shiny sprite from Pokémon
+// Crystal, looked up from PokéAPI like the pokeggdex looks up its Pokémon.
 // If the API can't be reached, the title simply shows without them.
 const SHINY_EXEGGCUTE = 102
 

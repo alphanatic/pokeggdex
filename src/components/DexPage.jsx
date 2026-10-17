@@ -1,7 +1,7 @@
 import { formatName, formatNumber } from '../utils.js'
 
-// The Pokédex page as shown on the left screen (and mirrored on the TV),
-// laid out like the Pokédex page in Pokémon Red/Blue.
+// The pokeggdex page as shown on the left screen (and mirrored on the TV),
+// laid out like the pokeggdex page in Pokémon Red/Blue.
 export default function DexPage({ pokemon, shiny, loading, error }) {
   if (error) return <p className="screen-message">{error}</p>
   if (!pokemon) return <p className="screen-message">LOADING...</p>

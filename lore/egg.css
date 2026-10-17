@@ -1,6 +1,6 @@
 /* The easter egg guide (/lore/), dressed like the S.S. Anne cabin on the
    front page: cream striped wallpaper under a wooden beam, pixel fonts,
-   Red/Blue-style text boxes, Pokédex-screen tables and Poké Ball red. */
+   Red/Blue-style text boxes, pokeggdex-screen tables and Poké Ball red. */
 
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=M+PLUS+Rounded+1c:wght@400;500;700;800&family=Press+Start+2P&family=VT323&display=swap');
 
@@ -101,7 +101,7 @@ main {
   align-items: center;
   gap: 4px;
 }
-/* "No.102 タマタマ": the Pokédex number in pixel type and the Japanese name,
+/* "No.102 タマタマ": the pokeggdex number in pixel type and the Japanese name,
    above the title, like the first TV concept's "No.006 リザードン" */
 .kicker {
   font-size: 13px;
@@ -195,7 +195,7 @@ code {
 }
 .lore strong { color: var(--red-d); }
 
-/* tables look like the Pokédex's screens */
+/* tables look like the pokeggdex's screens */
 .table-wrap {
   overflow-x: auto;
   margin: 0 0 16px;

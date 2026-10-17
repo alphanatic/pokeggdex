@@ -1,7 +1,7 @@
 // Wireless pulse logic: how many times the link flashes in each sequence.
 //
-// While the wall screen is linked to the Pokédex, every few seconds the link
-// button flashes 1, 2 or 3 times (and the Pokédex echoes it). Picking freely
+// While the wall screen is linked to the pokeggdex, every few seconds the link
+// button flashes 1, 2 or 3 times (and the pokeggdex echoes it). Picking freely
 // would sometimes give long runs of busy triple flashes, so:
 //   - after a 3, the next 3 sequences can't be a 3
 //   - after a 2, the next sequence can't be a 2 or a 3 (so it's a 1)

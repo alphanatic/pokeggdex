@@ -53,7 +53,7 @@ export function PortholeRim() {
 
 // ------------------------------------------------------------ what passes by
 
-// Each visitor: its Pokédex number, how long its visit lasts, how often it comes.
+// Each visitor: its pokeggdex number, how long its visit lasts, how often it comes.
 const VISITORS = {
   magikarp: { id: 129, ms: 2400, weight: 5 },
   tentacool: { id: 72, ms: 5200, weight: 4 },
@@ -109,7 +109,7 @@ function pose(type, t) {
 
 // What you hear when you click a visitor
 // (Each of these is a Pokémon dialogue: it's said with the visitor's number, so
-// the Pokédex turns to that Pokémon. See the Pokédex trigger pulse in App.jsx.)
+// the pokeggdex turns to that Pokémon. See the pokeggdex trigger pulse in App.jsx.)
 const TALK = {
   magikarp: ['MAN: Hello, there! Have I got a deal just for you!', "I'll let you have a swell MAGIKARP for just ¥500!", 'MAGIKARP used SPLASH! ...But nothing happened!'],
   tentacool: ['A wild TENTACOOL appeared!', 'The sea is full of them. Better stock up on REPELs before you SURF.'],

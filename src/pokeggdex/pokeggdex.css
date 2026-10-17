@@ -1,4 +1,4 @@
-/* The Pokédex's styles (the device, its spot in a scene, its slide-in), plus
+/* The pokeggdex's styles (the device, its spot in a scene, its slide-in), plus
    the page basics it needs. Loaded after fanta.css so these win where both apply. */
 
 /* Pixel fonts from Google Fonts: Press Start 2P (Game Boy style) and VT323 (old LCD). */
@@ -27,8 +27,8 @@ body {
   overflow: hidden;
 }
 
-/* The Pokédex's spot. The scene that calls it in works out where that is for
-   the window's size and sets --dex-x, --dex-y and --dex-scale (see Pokedex.jsx). */
+/* The pokeggdex's spot. The scene that calls it in works out where that is for
+   the window's size and sets --dex-x, --dex-y and --dex-scale (see Pokeggdex.jsx). */
 .dex-stage {
   position: fixed;
   left: var(--dex-x, 67vw);
@@ -37,12 +37,12 @@ body {
   height: 568px;
   transform: translate(-50%, -50%) scale(var(--dex-scale, 0.8));
   /* Above a scene's window-wide layers (z-index 9 and below), like the cabin's
-     dialogue layer: the Pokédex stays usable while someone is talking. */
+     dialogue layer: the pokeggdex stays usable while someone is talking. */
   z-index: 10;
 }
 
 /* Called into a scene, it slides in from the side of the screen nearest its
-   spot (--enter-dx, worked out in Pokedex.jsx) and settles there. */
+   spot (--enter-dx, worked out in Pokeggdex.jsx) and settles there. */
 .dex-stage.entering { animation: dex-enter 0.9s cubic-bezier(0.2, 0.8, 0.25, 1); }
 @keyframes dex-enter {
   from { transform: translate(calc(-50% + var(--enter-dx, 0px)), -50%) scale(var(--dex-scale, 0.8)); }
@@ -59,7 +59,7 @@ body {
    lid rim 17.4, lid floor 11.3. Seen slightly from above, a surface at height z
    is drawn (22.7 - z) / 2 lower than its plan position. */
 
-.pokedex {
+.pokeggdex {
   position: relative;
   flex: none;
   width: 764.4px;  /* base 356, hinge, lid 356: the lid mirrors the base over the hinge */
@@ -71,7 +71,7 @@ body {
 }
 
 /* Closed, only the base and hinge are left (403.6 wide): slide it so it stays centred. */
-.pokedex.closed {
+.pokeggdex.closed {
   transform: translateX(180.4px);
 }
 
@@ -127,7 +127,7 @@ body {
 }
 
 /* The hinge is a button: click it to fold the lid shut or open it. */
-.pokedex .hinge {
+.pokeggdex .hinge {
   position: absolute;
   top: 0;
   left: 360.85px; /* centre line 382.2, 42.7 across */
@@ -137,10 +137,10 @@ body {
   border-radius: 0;
   cursor: pointer;
 }
-.pokedex .hinge:hover { filter: brightness(1.15); }
+.pokeggdex .hinge:hover { filter: brightness(1.15); }
 /* No box-shaped focus ring around the cylinder; keyboard focus glows along its shape instead */
-.pokedex .hinge:focus { outline: none; }
-.pokedex .hinge:focus-visible { filter: brightness(1.15) drop-shadow(0 0 3px rgba(255, 240, 230, 0.9)); }
+.pokeggdex .hinge:focus { outline: none; }
+.pokeggdex .hinge:focus-visible { filter: brightness(1.15) drop-shadow(0 0 3px rgba(255, 240, 230, 0.9)); }
 
 /* The lid turns around the hinge's centre line (26.2 to the left of the lid). */
 .lid {
@@ -150,7 +150,7 @@ body {
   transition: transform 0.9s cubic-bezier(0.6, 0, 0.3, 1);
   will-change: transform; /* paint the worn texture once, not on every frame of the fold */
 }
-.pokedex.closed .lid {
+.pokeggdex.closed .lid {
   transform: rotateY(-180deg);
 }
 
@@ -180,7 +180,7 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pokedex,
+  .pokeggdex,
   .lid { transition: none; }
 }
 
@@ -229,7 +229,7 @@ body {
   transition: background-color 0.3s;
 }
 
-/* The Pokédex trigger pulse (App.jsx): when a dialogue about a Pokémon starts,
+/* The pokeggdex trigger pulse (App.jsx): when a dialogue about a Pokémon starts,
    the sensor lights up in a glow of light ocean blue, splashes of lavender, an
    undertone of Bulbasaur green and a finishing coat of white-mixed light blue,
    up to 75%, holds it 0.2 s, then fades to nothing. It's its own layer
@@ -309,7 +309,7 @@ body {
   50% { filter: brightness(0.4) saturate(0.7); box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5); }
 }
 
-/* Linked to the cabin's wall screen, the Pokédex echoes the screen's flash
+/* Linked to the cabin's wall screen, the pokeggdex echoes the screen's flash
    0.2 s later, with the same timing (see .pulse-* in cabin/vermillion.css): the
    green light flips (lit dims to 30%, dark lights up), and the yellow light
    glows faintly at 45%. "30%" here means 30% of the way from a light's off
@@ -491,7 +491,7 @@ body {
 
 /* ============ Controls (left) ============ */
 
-.pokedex .round-button {
+.pokeggdex .round-button {
   left: 19.1px;
   top: 427.3px;
   width: 45.2px;
@@ -500,13 +500,13 @@ body {
   background: var(--scuff), var(--grain), radial-gradient(circle at 40% 35%, #3a3332, #1a1514 70%);
 }
 
-.pokedex .pill {
+.pokeggdex .pill {
   top: 439.7px;
   height: 16.9px;
   border-radius: 5px;
 }
-.pokedex .pill-red  { left: 78.4px;  width: 61.8px; background: var(--scuff), var(--grain), linear-gradient(#a04a42, #8a3a34); }
-.pokedex .pill-blue { left: 153.1px; width: 63.7px; background: var(--scuff), var(--grain), linear-gradient(#6a7b84, #55656e); }
+.pokeggdex .pill-red  { left: 78.4px;  width: 61.8px; background: var(--scuff), var(--grain), linear-gradient(#a04a42, #8a3a34); }
+.pokeggdex .pill-blue { left: 153.1px; width: 63.7px; background: var(--scuff), var(--grain), linear-gradient(#6a7b84, #55656e); }
 
 /* The D-pad is one black cross: a solid cross behind the four arms, with the
    side drawn around the whole cross, so nothing of the red shows between them. */
@@ -694,14 +694,14 @@ body {
 .lid-led-1 { left: 47.1px; top: 413.4px; }
 .lid-led-2 { left: 71px;   top: 413.4px; }
 
-.pokedex .black-slit {
+.pokeggdex .black-slit {
   top: 414.9px;
   height: 13.2px;
   border-radius: 999px;
   background: var(--scuff), var(--grain), var(--plastic-dark);
 }
-.pokedex .slit-1 { left: 138.2px; width: 56px; }
-.pokedex .slit-2 { left: 205.4px; width: 57.4px; }
+.pokeggdex .slit-1 { left: 138.2px; width: 56px; }
+.pokeggdex .slit-2 { left: 205.4px; width: 57.4px; }
 
 .arrow-buttons {
   left: 40.7px;
@@ -712,7 +712,7 @@ body {
   gap: 2px;
 }
 
-.pokedex .yellow-button {
+.pokeggdex .yellow-button {
   left: 233.3px;
   top: 441.2px;
   width: 32.2px;
@@ -744,19 +744,19 @@ body {
 }
 
 /* The search box is an <input> styled to look like the other readout panel. */
-.pokedex .search-box {
+.pokeggdex .search-box {
   border: none;
   border-radius: 7px;
   background: var(--grain), #6a1f1b;
   color: #f0d6c8;
 }
-.pokedex .search-box::placeholder { color: #f0d6c8; opacity: 0.45; }
-.pokedex .search-box:focus { outline: 2px solid rgba(240, 214, 200, 0.45); }
+.pokeggdex .search-box::placeholder { color: #f0d6c8; opacity: 0.45; }
+.pokeggdex .search-box:focus { outline: 2px solid rgba(240, 214, 200, 0.45); }
 
 /* ============ Buttons ============ */
 
 /* Undo fanta.css's button look inside the device... */
-.pokedex button {
+.pokeggdex button {
   border: none;
   box-shadow: none;
   padding: 0;
@@ -764,7 +764,7 @@ body {
   transform: none;
   transition: transform 80ms, box-shadow 80ms;
 }
-.pokedex button:hover {
+.pokeggdex button:hover {
   transform: none;
   box-shadow: none;
 }
@@ -797,7 +797,7 @@ body {
 }
 
 /* ...and the physical buttons, which stick out of the device. */
-.pokedex :is(.round-button, .pill, .dpad button, .black-slit, .yellow-button, .grey-button) {
+.pokeggdex :is(.round-button, .pill, .dpad button, .black-slit, .yellow-button, .grey-button) {
   transform: none;
   box-shadow:
     0 4px 0 rgba(0, 0, 0, 0.5),              /* the button's side */
@@ -807,8 +807,8 @@ body {
 }
 
 /* Pressed (while clicking, or the active choice): pushed into the device. */
-.pokedex :is(.round-button, .pill, .dpad button, .black-slit, .yellow-button, .grey-button):active,
-.pokedex :is(.round-button, .pill, .dpad button, .black-slit, .yellow-button, .grey-button).pressed {
+.pokeggdex :is(.round-button, .pill, .dpad button, .black-slit, .yellow-button, .grey-button):active,
+.pokeggdex :is(.round-button, .pill, .dpad button, .black-slit, .yellow-button, .grey-button).pressed {
   transform: translateY(3px);
   box-shadow:
     0 1px 0 rgba(0, 0, 0, 0.45),
@@ -823,21 +823,21 @@ body {
 }
 /* The side belongs to the whole cross (see .dpad); a pressed arm sinks in
    place instead of sliding away from the others. */
-.pokedex .dpad button,
-.pokedex .dpad button:active {
+.pokeggdex .dpad button,
+.pokeggdex .dpad button:active {
   transform: none;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
-.pokedex .dpad button:active {
+.pokeggdex .dpad button:active {
   background: var(--grain), #121010;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 /* No focus rectangles on the device's buttons after a click; keyboard focus gets a soft ring. */
-.pokedex button:focus:not(:focus-visible) { outline: none; }
-.pokedex button:focus-visible { outline: 2px solid rgba(255, 240, 230, 0.6); outline-offset: -2px; }
+.pokeggdex button:focus:not(:focus-visible) { outline: none; }
+.pokeggdex button:focus-visible { outline: 2px solid rgba(255, 240, 230, 0.6); outline-offset: -2px; }
 
-.pokedex .grey-button {
+.pokeggdex .grey-button {
   flex: 1;
   height: 100%;
   border-radius: 5px;
@@ -848,7 +848,7 @@ body {
 }
 
 /* Keys: their own, flatter bevel so the tight grid doesn't overlap */
-.pokedex .key {
+.pokeggdex .key {
   border-radius: 3px;
   background: var(--scuff), var(--grain), linear-gradient(#52758a, var(--key-blue));
   color: #e1e8ec;
@@ -860,7 +860,7 @@ body {
     inset 0 1px 0 rgba(255, 255, 255, 0.3),
     inset 0 -3px 0 rgba(0, 0, 0, 0.35);
 }
-.pokedex .key:active {
+.pokeggdex .key:active {
   transform: translateY(1px);
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.45);
 }
@@ -880,19 +880,21 @@ body {
 
 /* ============ Small screens: stack the halves ============ */
 
-/* Narrower than the open device: stack them like a phone-sized Pokédex. */
+/* Narrower than the open device: stack them like a phone-sized pokeggdex. */
 @media (max-width: 799px) {
   body { overflow: auto; padding: 1.5rem 1rem; }
-  /* the scene as a picture on top, the Pokédex below it (no slide-in here) */
+  /* the scene as a picture on top, the pokeggdex below it (no slide-in here) */
   #root { display: flex; flex-direction: column; align-items: center; }
   .dex-stage {
     position: relative; /* not static, so z-index still lifts it above the dialogue layer */
+    left: auto; /* ignore the scene's --dex-x/--dex-y spot, or relative would shift it by that much */
+    top: auto;
     width: auto;
     height: auto;
     transform: none;
   }
   .dex-stage.entering { animation: none; }
-  .pokedex {
+  .pokeggdex {
     display: flex;
     flex-direction: column;
     width: auto;
@@ -905,13 +907,13 @@ body {
   }
   .lid { margin-top: -24px; } /* its top edge starts 47 down, at the hinge side */
   /* Stacked halves don't fold, so there is no hinge (nor its leaves). */
-  .pokedex .hinge,
+  .pokeggdex .hinge,
   .body .hinge-part { display: none; }
-  .pokedex.closed,
-  .pokedex.closed .lid { transform: none; }
+  .pokeggdex.closed,
+  .pokeggdex.closed .lid { transform: none; }
   .lid-outside { display: none; }
 }
 
 /* Phones narrower than one half (356 + margins): shrink the whole device. */
-@media (max-width: 387px) { .pokedex { zoom: 0.88; } }
-@media (max-width: 340px) { .pokedex { zoom: 0.78; } }
+@media (max-width: 387px) { .pokeggdex { zoom: 0.88; } }
+@media (max-width: 340px) { .pokeggdex { zoom: 0.78; } }

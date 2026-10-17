@@ -1,12 +1,12 @@
-# Pokédex Design Document
+# pokeggdex Design Document
 
 Oct 9, 2026
 
 ## Overview
 
-The Pokédex is two 400 × 568 halves joined by a round 28 hinge. The right half (the lid) folds over the left half into a closed book of 428 × 568 × 28.
+The pokeggdex is two 400 × 568 halves joined by a round 28 hinge. The right half (the lid) folds over the left half into a closed book of 428 × 568 × 28.
 
-- **Based on:** the Pokédex from the first season of the Pokémon anime, with Game Boy-style screens from Pokémon Red/Blue.
+- **Based on:** the pokeggdex from the first season of the Pokémon anime, with Game Boy-style screens from Pokémon Red/Blue.
 - **Built as:** a React web app (Vite) that reads live data from PokéAPI. It sits on a pixel-art game-world background.
 - **Units:** all sizes are CSS pixels at desktop size. The drawings are at 0.84 × that scale.
 - **Key idea:** a raised sensor plate holds the lens and lights. When closed, the lid fits around it and both form one flat surface.
@@ -21,7 +21,7 @@ The lighter area at the top-left is the raised sensor plate. The lid is tall nex
 
 ## Front view, closed
 
-Closed, the Pokédex is a flat 428 × 568 rectangle with the hinge on its right edge. The lens and lights stay visible on the sensor plate.
+Closed, the pokeggdex is a flat 428 × 568 rectangle with the hinge on its right edge. The lens and lights stay visible on the sensor plate.
 
 ![Front view, closed · 428 × 568](front-closed.svg)
 
@@ -45,7 +45,7 @@ At the top edge only the lid's tall part next to the hinge reaches the front; th
 
 ## Dimensions
 
-Closed, the Pokédex measures 428 × 568 × 28; open, it is 828 × 568. Width runs across the front, height top to bottom, thickness off the table.
+Closed, the pokeggdex measures 428 × 568 × 28; open, it is 828 × 568. Width runs across the front, height top to bottom, thickness off the table.
 
 | Part | Width | Height | Thickness | Notes |
 | --- | --- | --- | --- | --- |
@@ -67,14 +67,14 @@ Every part on the device does something in the app; the numbers match the front-
 | --- | --- | --- | --- |
 | 1 | Lens | Sensor plate | Glows blue while the app waits for the API |
 | 2 | Status lights (red, yellow, green) | Sensor plate | Red = error, yellow blinking = loading, green = ready |
-| 3 | Main screen | Left half | Pokédex page: sprite, name, category, height, weight, number |
+| 3 | Main screen | Left half | pokeggdex page: sprite, name, category, height, weight, number |
 | 4 | Round black button | Left half | Plays the Pokémon's original 8-bit cry |
 | 5 | Red and grey-blue buttons | Left half | Normal or shiny colours |
 | 6 | D-pad | Left half | Left/right: previous or next Pokémon. Up/down: change the right screen's mode |
-| 7 | Recessed panel | Left half | Engraved "POKéDEX" |
+| 7 | Recessed panel | Left half | Engraved "pokeggdex" |
 | 8 | Hinge | Between the halves | Click to fold the lid shut or open it |
 | 9 | Right screen | Lid | Modes: Entry, Stats, Moves, Sprites, List |
-| 10 | Keypad (2 × 5) | Lid | Type a Pokédex number; jumps there after 3 digits |
+| 10 | Keypad (2 × 5) | Lid | Type a pokeggdex number; jumps there after 3 digits |
 | 11 | Black slits | Lid | Upper: clear the number. Lower: random Pokémon |
 | 12 | Yellow button | Lid | OK: go to the typed number |
 | 13 | Small lights | Lid | Orange = typing a number, green = cry playing |
