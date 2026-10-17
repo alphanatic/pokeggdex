@@ -13,9 +13,8 @@ import './vermillion.css'
 // A cabin on the S.S. Anne, docked in Vermilion City: the world around the
 // pokeggdex. It's pixel art, 320 x 180 pixels, scaled up to cover the window
 // (like background-size: cover) and anchored at the top.
-// This scene calls the pokeggdex in (it slides in from the right) and stands it
-// on the fold-out table; the wall screen shows what it shows. Clicking things in
-// the cabin can tell you something, like reading a sign in the games. Some of
+// This scene calls the pokeggdex in and stands it on the fold-out table; the
+// wall screen shows what it shows. Clicking things in the cabin can tell you something, like reading a sign in the games. Some of
 // them are easter eggs. Its styles are in vermillion.css.
 
 export const SCENE = { w: 320, h: 180 }

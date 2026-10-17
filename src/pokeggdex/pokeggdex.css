@@ -1,4 +1,4 @@
-/* The pokeggdex's styles (the device, its spot in a scene, its slide-in), plus
+/* The pokeggdex's styles (the device and its spot in a scene), plus
    the page basics it needs. Loaded after fanta.css so these win where both apply. */
 
 /* Pixel fonts from Google Fonts: Press Start 2P (Game Boy style) and VT323 (old LCD). */
@@ -24,6 +24,7 @@
 
 body {
   min-height: 100vh;
+  min-height: 100dvh; /* the height left after the browser's own bars, on phones */
   overflow: hidden;
 }
 
@@ -39,16 +40,6 @@ body {
   /* Above a scene's window-wide layers (z-index 9 and below), like the cabin's
      dialogue layer: the pokeggdex stays usable while someone is talking. */
   z-index: 10;
-}
-
-/* Called into a scene, it slides in from the side of the screen nearest its
-   spot (--enter-dx, worked out in Pokeggdex.jsx) and settles there. */
-.dex-stage.entering { animation: dex-enter 0.9s cubic-bezier(0.2, 0.8, 0.25, 1); }
-@keyframes dex-enter {
-  from { transform: translate(calc(-50% + var(--enter-dx, 0px)), -50%) scale(var(--dex-scale, 0.8)); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .dex-stage.entering { animation: none; }
 }
 
 /* ============ The device: left half, hinge, lid ============
@@ -880,10 +871,12 @@ body {
 
 /* ============ Small screens: stack the halves ============ */
 
-/* Narrower than the open device: stack them like a phone-sized pokeggdex. */
-@media (max-width: 799px) {
+/* Narrower than the open device and upright: stack them like a phone-sized
+   pokeggdex. Phones on their side keep the scene layout, since stacked the
+   device would sit below a screen that is too short to show it. */
+@media (max-width: 799px) and (orientation: portrait) {
   body { overflow: auto; padding: 1.5rem 1rem; }
-  /* the scene as a picture on top, the pokeggdex below it (no slide-in here) */
+  /* the scene as a picture on top, the pokeggdex below it */
   #root { display: flex; flex-direction: column; align-items: center; }
   .dex-stage {
     position: relative; /* not static, so z-index still lifts it above the dialogue layer */
@@ -893,27 +886,39 @@ body {
     height: auto;
     transform: none;
   }
-  .dex-stage.entering { animation: none; }
-  .pokeggdex {
+  /* Closed, it stays the folded device (base and hinge, 403.6 wide), so the
+     hinge can be tapped to open it. Its wider box is clipped so the page
+     doesn't scroll sideways. */
+  .pokeggdex.closed {
+    width: 403.6px;
+    transform: none;
+    overflow: clip;
+    overflow-clip-margin: 40px; /* room for its shadow */
+  }
+  /* Open, the halves stack. */
+  .pokeggdex:not(.closed) {
     display: flex;
     flex-direction: column;
     width: auto;
     height: auto;
   }
-  .half-left,
-  .lid {
+  .pokeggdex:not(.closed) .half-left,
+  .pokeggdex:not(.closed) .lid {
     position: relative;
     left: auto;
   }
-  .lid { margin-top: -24px; } /* its top edge starts 47 down, at the hinge side */
+  .pokeggdex:not(.closed) .lid { margin-top: -24px; } /* its top edge starts 47 down, at the hinge side */
   /* Stacked halves don't fold, so there is no hinge (nor its leaves). */
-  .pokeggdex .hinge,
-  .body .hinge-part { display: none; }
-  .pokeggdex.closed,
-  .pokeggdex.closed .lid { transform: none; }
-  .lid-outside { display: none; }
+  .pokeggdex:not(.closed) .hinge,
+  .pokeggdex:not(.closed) .hinge-part,
+  .pokeggdex:not(.closed) .lid-outside { display: none; }
 }
 
-/* Phones narrower than one half (356 + margins): shrink the whole device. */
-@media (max-width: 387px) { .pokeggdex { zoom: 0.88; } }
-@media (max-width: 340px) { .pokeggdex { zoom: 0.78; } }
+/* Phones narrower than the closed device (403.6 + margins): shrink it, open or
+   closed alike, so the cabin strip above can be sized for one height
+   (see vermillion.css). */
+@media (max-width: 435px) and (orientation: portrait) { .pokeggdex { zoom: 0.88; } }
+@media (max-width: 340px) and (orientation: portrait) {
+  .pokeggdex { zoom: 0.78; }
+  .pokeggdex.closed { zoom: 0.74; }
+}

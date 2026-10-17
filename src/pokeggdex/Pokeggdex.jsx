@@ -13,19 +13,9 @@ import { BaseBody, HingeBody, LidBody, LidBack, WearDefs } from '../components/S
 //   - placement:    where it stands: { '--dex-x', '--dex-y', '--dex-scale' }
 //   - pulse:        { id, count } flashes the three lights on top echo (or null)
 //   - triggerPulse: a count; each time it goes up, the sensor lights up once
-// When it first appears it slides in from the side of the screen nearest to
-// its spot, then settles there.
 
 const TOTAL = 151
 const MODES = ['entry', 'stats', 'moves', 'sprites', 'list'] // what the right screen can show
-const DEX_WIDTH = 764.4 // the open pokeggdex, in CSS px before scaling
-
-// How far to the side it starts: past whichever screen edge is closer to its spot.
-function entranceOffset(placement) {
-  const x = parseFloat(placement['--dex-x'])
-  const halfWidth = (DEX_WIDTH * placement['--dex-scale']) / 2 + 40
-  return x < window.innerWidth / 2 ? -(x + halfWidth) : window.innerWidth - x + halfWidth
-}
 
 export default function Pokeggdex({ dex, placement, pulse = null, triggerPulse = 0 }) {
   const { list, selectedId, select, pokemon, loading, error, shiny, setShiny, closed, setClosed } = dex
@@ -34,8 +24,6 @@ export default function Pokeggdex({ dex, placement, pulse = null, triggerPulse =
   const [message, setMessage] = useState('No.___')  // keypad feedback, e.g. "Found #025"
   const [search, setSearch] = useState('')          // text in the search box
   const [playingCry, setPlayingCry] = useState(false)
-  // worked out once, when it first appears, so resizing the window doesn't replay it
-  const [enterFrom] = useState(() => entranceOffset(placement))
 
   // Move forwards/backwards through the pokeggdex, wrapping around at the ends.
   function step(amount) {
@@ -144,7 +132,7 @@ export default function Pokeggdex({ dex, placement, pulse = null, triggerPulse =
     <>
       <WearDefs />
 
-      <div className="dex-stage entering" style={{ ...placement, '--enter-dx': `${enterFrom}px` }}>
+      <div className="dex-stage" style={placement}>
         <main className={'pokeggdex' + (closed ? ' closed' : '')}>
           {/* ---------- Left half ----------
               Every part sits where it is on the measured device (see shape.js). */}
