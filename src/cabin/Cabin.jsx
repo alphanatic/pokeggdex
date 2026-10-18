@@ -12,46 +12,62 @@ import './vermillion.css'
 
 // A cabin on the S.S. Anne, docked in Vermilion City: the world around the
 // pokeggdex. It's pixel art, 320 x 180 pixels, scaled up to cover the window
-// (like background-size: cover) and anchored at the top.
+// (like background-size: cover) and anchored at the top. It never shows less
+// than VIEW_MIN of its width, so the wall screen and the porthole stay whole:
+// narrower windows shrink it instead, and the floor grows downwards to fill the rest.
 // This scene calls the pokeggdex in and stands it on the fold-out table; the
 // wall screen shows what it shows. Clicking things in the cabin can tell you something, like reading a sign in the games. Some of
 // them are easter eggs. Its styles are in vermillion.css.
 
 export const SCENE = { w: 320, h: 180 }
 const FLOOR_Y = 140 // where the wall meets the floor
-const TABLE_Y = 156 // the table top, where the pokeggdex stands
+const TABLE_H = 16 // the table layer's height in scene pixels: top board 12, legs 4 (see Table)
+const TABLE_TOP = 1 // its top surface, where the pokeggdex stands, from the layer's top edge
+const VIEW_MIN = 250 // the least of the scene's width that stays in view: x 35-285, wall screen to porthole
 
 // Where the pokeggdex stands on the table: its middle, and how wide it is there.
 const DEX_SPOT = { x: 250, width: 104 }
 const DEX = { w: 764.4, h: 568 } // the open pokeggdex (.dex-stage), in CSS px
 const DEX_SIZE = 1.05 // 5% larger than the base size below
+const PHONE_W = 800 // in windows narrower than this, the pokeggdex is PHONE_SIZE as large
+const PHONE_SIZE = 0.6
 
-// Places the pokeggdex on the table, for the current window size.
-function useDexPlacement() {
-  const [place, setPlace] = useState(null)
+// Fits the scene to the current window size and places the table and the pokeggdex.
+// Gives the scene's height in scene pixels (180, or more where the floor grows),
+// the scale k (scene pixels -> screen pixels), where the table starts, and the
+// pokeggdex's placement.
+function useLayout() {
+  const [layout, setLayout] = useState(null)
   useEffect(() => {
     function update() {
       const W = window.innerWidth
       const H = window.innerHeight
-      const k = Math.max(W / SCENE.w, H / SCENE.h) // scene pixels -> screen pixels
-      // its size follows the cabin, but never so small it's hard to use, nor bigger than the window
-      let s = Math.max((DEX_SPOT.width / DEX.w) * k, Math.min(0.6, (W * 0.42) / DEX.w)) * DEX_SIZE
+      const cover = Math.max(W / SCENE.w, H / SCENE.h)
+      const k = Math.max(W / SCENE.w, Math.min(H / SCENE.h, W / VIEW_MIN)) // scene pixels -> screen pixels
+      // its size follows the cabin (as if it covered the window), but never so small it's hard to use, nor bigger than the window
+      let s = Math.max((DEX_SPOT.width / DEX.w) * cover, Math.min(0.6, (W * 0.42) / DEX.w)) * DEX_SIZE
+      if (W < PHONE_W) s *= PHONE_SIZE
       s = Math.min(s, (W - 32) / DEX.w, (H - 32) / (DEX.h + 24))
-      const x = (W - SCENE.w * k) / 2 + DEX_SPOT.x * k
-      const y = TABLE_Y * k - ((DEX.h + 20) * s) / 2 // stood on the table top
       const halfW = (DEX.w * s) / 2 + 16
       const halfH = ((DEX.h + 24) * s) / 2 + 16
-      setPlace({
-        '--dex-x': `${Math.min(Math.max(x, halfW), W - halfW)}px`,
-        '--dex-y': `${Math.min(Math.max(y, halfH), H - halfH)}px`,
-        '--dex-scale': s,
+      const x = Math.min(Math.max((W - SCENE.w * k) / 2 + DEX_SPOT.x * k, halfW), W - halfW)
+      const y = H - (TABLE_H - TABLE_TOP) * k - ((DEX.h + 20) * s) / 2 // stood on the table top
+      setLayout({
+        sceneH: Math.max(SCENE.h, Math.ceil(H / k)),
+        k,
+        tableX: Math.max(0, x - (DEX.w * s) / 2 - 6 * k), // from just left of the open pokeggdex
+        placement: {
+          '--dex-x': `${x}px`,
+          '--dex-y': `${Math.min(Math.max(y, halfH), H - halfH)}px`,
+          '--dex-scale': s,
+        },
       })
     }
     update()
     window.addEventListener('resize', update)
     return () => window.removeEventListener('resize', update)
   }, [])
-  return place
+  return layout
 }
 
 // ---------------------------------------------------------------- walls
@@ -108,9 +124,9 @@ function Wall() {
   )
 }
 
-function Floor() {
+function Floor({ h }) {
   const rows = []
-  for (let r = 0, y = FLOOR_Y + 1; y < SCENE.h; r++, y += 7) rows.push({ r, y })
+  for (let r = 0, y = FLOOR_Y + 1; y < h; r++, y += 7) rows.push({ r, y })
   return (
     <g>
       {rows.map(({ r, y }) => (
@@ -127,27 +143,30 @@ function Floor() {
 
 // ---------------------------------------------------------------- props
 
-// The fold-out table the pokeggdex stands on.
-function Table() {
-  const x = 180
+// The fold-out table the pokeggdex stands on. It's its own layer, in front of
+// the scene and anchored to the bottom of the window, so the pokeggdex always
+// stands at the same height there. Drawn in scene pixels from its top edge:
+// the top board, then just the top of its legs (TABLE_H in all). `w` is its
+// width; it reaches past the window's right edge.
+function Table({ w }) {
   return (
     <g>
-      <rect x={x + 1} y={TABLE_Y + 11} width={SCENE.w - x} height={SCENE.h} fill={C.ink} opacity={0.25} /> {/* its shadow */}
-      {[188, 306].map(lx => (
+      <rect x={1} y={12} width={w} height={TABLE_H} fill={C.ink} opacity={0.25} /> {/* its shadow */}
+      {[8, w - 14].map(lx => (
         <g key={lx}>
-          <rect x={lx - 1} y={TABLE_Y + 11} width={6} height={SCENE.h} fill={C.ink} />
-          <rect x={lx} y={TABLE_Y + 11} width={4} height={SCENE.h} fill={C.woodD} />
-          <rect x={lx} y={TABLE_Y + 11} width={1} height={SCENE.h} fill={C.wood} />
+          <rect x={lx - 1} y={12} width={6} height={TABLE_H} fill={C.ink} />
+          <rect x={lx} y={12} width={4} height={TABLE_H} fill={C.woodD} />
+          <rect x={lx} y={12} width={1} height={TABLE_H} fill={C.wood} />
         </g>
       ))}
-      <rect x={x + 1} y={TABLE_Y - 1} width={SCENE.w} height={12} fill={C.ink} />
-      <rect x={x} y={TABLE_Y} width={1} height={10} fill={C.ink} />
-      <rect x={x + 1} y={TABLE_Y} width={SCENE.w} height={1} fill={C.woodHL} />
-      <rect x={x + 1} y={TABLE_Y + 1} width={SCENE.w} height={2} fill={C.woodL} />
-      <rect x={x + 1} y={TABLE_Y + 3} width={SCENE.w} height={1} fill={C.ink} />
-      <rect x={x + 1} y={TABLE_Y + 4} width={SCENE.w} height={5} fill={C.wood} />
-      <rect x={x + 1} y={TABLE_Y + 4} width={SCENE.w} height={1} fill={C.woodL} />
-      <rect x={x + 1} y={TABLE_Y + 9} width={SCENE.w} height={1} fill={C.woodD} />
+      <rect x={1} y={0} width={w} height={12} fill={C.ink} />
+      <rect x={0} y={1} width={1} height={10} fill={C.ink} />
+      <rect x={1} y={1} width={w} height={1} fill={C.woodHL} />
+      <rect x={1} y={2} width={w} height={2} fill={C.woodL} />
+      <rect x={1} y={4} width={w} height={1} fill={C.ink} />
+      <rect x={1} y={5} width={w} height={5} fill={C.wood} />
+      <rect x={1} y={5} width={w} height={1} fill={C.woodL} />
+      <rect x={1} y={10} width={w} height={1} fill={C.woodD} />
     </g>
   )
 }
@@ -287,7 +306,8 @@ export default function Cabin() {
   // so visitors get to discover that it opens (the hinge, or a Pokémon dialogue).
   const dex = usePokeggdex({ startClosed: true })
   const { pokemon, loading, error, shiny, setShiny, select, setClosed } = dex
-  const placement = useDexPlacement()
+  const layout = useLayout()
+  const sceneH = layout?.sceneH ?? SCENE.h
 
   // The wall screen's link to the pokeggdex (see link.js): its flashes are echoed
   // by the pokeggdex's lights. Switching the screen off also folds the pokeggdex shut.
@@ -339,20 +359,19 @@ export default function Cabin() {
     <div className="cabin">
       <svg
         className="cabin-scene"
-        viewBox={`0 0 ${SCENE.w} ${SCENE.h}`}
+        viewBox={`0 0 ${SCENE.w} ${sceneH}`}
         preserveAspectRatio="xMidYMin slice"
         shapeRendering="crispEdges"
         aria-label="A cabin on the S.S. Anne, docked in Vermilion City"
       >
         {/* the room itself, lit by the time of day */}
         <Wall />
-        <Floor />
+        <Floor h={sceneH} />
         <PortholeRim />
         <ScreenFrame />
         <LifeRing onClick={() => say(['OAK: RED!', "This isn't the time to use that!"])} />
         <Plaque onClick={() => say(['SAILOR: The S.S.ANNE is a famous luxury cruise ship.', 'We visit VERMILION once a year.'])} />
-        <Table />
-        {light.tint && <rect width={SCENE.w} height={SCENE.h} fill={light.tint} opacity={light.amount} pointerEvents="none" />}
+        {light.tint && <rect width={SCENE.w} height={sceneH} fill={light.tint} opacity={light.amount} pointerEvents="none" />}
 
         {/* things that make their own light, or show the light outside */}
         <ScreenGlow pokemon={pokemon} strength={light.glow} link={link} />
@@ -361,11 +380,29 @@ export default function Cabin() {
         <Lamp lit={time !== 'day'} />
       </svg>
 
+      {/* the table, in front of the scene: see Table */}
+      {layout && (() => {
+        const w = (window.innerWidth - layout.tableX) / layout.k
+        return (
+          <svg
+            className="cabin-table"
+            style={{ left: layout.tableX, height: TABLE_H * layout.k }}
+            viewBox={`0 0 ${w} ${TABLE_H}`}
+            preserveAspectRatio="none"
+            shapeRendering="crispEdges"
+            aria-hidden="true"
+          >
+            <Table w={w} />
+            {light.tint && <rect width={w} height={TABLE_H} fill={light.tint} opacity={light.amount} />}
+          </svg>
+        )
+      })()}
+
       {message && <TextBox key={message.id} pages={message.pages} onDone={() => setMessage(null)} />}
     </div>
 
     {/* the pokeggdex, called into the cabin once we know where it stands */}
-    {placement && <Pokeggdex dex={dex} placement={placement} pulse={pulse} triggerPulse={dexTriggerPulse} />}
+    {layout && <Pokeggdex dex={dex} placement={layout.placement} pulse={pulse} triggerPulse={dexTriggerPulse} />}
     </>
   )
 }
